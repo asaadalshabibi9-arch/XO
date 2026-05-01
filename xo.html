@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
-<title>X O Game</title>
+<title id="page-title">لعبة X O</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -55,17 +55,19 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
 
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
 .top-title{font-size:22px;font-weight:800;letter-spacing:.05em;color:var(--text);}
-.toggle{display:flex;align-items:center;gap:8px;cursor:pointer;
+.actions-wrap{display:flex;align-items:center;gap:8px;}
+
+.action-btn{display:flex;align-items:center;gap:6px;cursor:pointer;
   background:var(--bg2);border:1px solid var(--border);
-  border-radius:50px;padding:6px 14px;transition:background .25s,border-color .25s;
-  user-select:none;}
-.toggle-icon{font-size:14px;}
-.toggle-track{width:36px;height:20px;border-radius:10px;background:var(--border);
+  border-radius:50px;padding:6px 12px;transition:background .25s,border-color .25s;
+  user-select:none;font-size:12px;font-weight:700;color:var(--text2);}
+
+.toggle-track{width:32px;height:18px;border-radius:10px;background:var(--border);
   position:relative;transition:background .25s;flex-shrink:0;}
 .light .toggle-track{background:#bbb;}
-.toggle-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;
+.toggle-thumb{position:absolute;top:2px;left:2px;width:14px;height:14px;
   border-radius:50%;background:var(--text3);transition:transform .25s,background .25s;}
-.light .toggle-thumb{transform:translateX(16px);background:#fff;}
+.light .toggle-thumb{transform:translateX(14px);background:#fff;}
 
 .big-title{
   font-size:clamp(3rem,18vw,4.5rem);font-weight:800;text-align:center;
@@ -182,11 +184,13 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
 
   <div class="screen active" id="ws">
     <div class="topbar">
-      <span class="top-title">X O</span>
-      <div class="toggle" onclick="toggleTheme()">
-        <span id="te1">🌙</span>
-        <div class="toggle-track"><div class="toggle-thumb"></div></div>
-        <span class="toggle-icon" id="tl1">Dark</span>
+      <span class="top-title" id="t-game-title">لعبة X O</span>
+      <div class="actions-wrap">
+        <div class="action-btn" onclick="toggleLang()" id="lang-btn">EN</div>
+        <div class="action-btn" onclick="toggleTheme()">
+          <span id="te1">🌙</span>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </div>
       </div>
     </div>
 
@@ -195,48 +199,49 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
     </div>
 
     <div class="card">
-      <label class="lbl">Your name</label>
-      <input class="inp" id="p1name" placeholder="Enter your name..." maxlength="14" inputmode="text"/>
+      <label class="lbl" id="t-p1-lbl">اسمك</label>
+      <input class="inp" id="p1name" placeholder="أدخل اسمك..." maxlength="14" inputmode="text"/>
     </div>
 
     <div class="card">
-      <label class="lbl">Play mode</label>
+      <label class="lbl" id="t-mode-lbl">طريقة اللعب</label>
       <div class="mode-row">
         <button class="mbtn sel" onclick="setMode('ai')" id="m-ai">
-          <span class="micon">🤖</span>vs Computer
+          <span class="micon">🤖</span><span id="t-mode-ai">ضد الكمبيوتر</span>
         </button>
         <button class="mbtn" onclick="setMode('2p')" id="m-2p">
-          <span class="micon">🤝</span>Two players
+          <span class="micon">🤝</span><span id="t-mode-2p">لاعبان</span>
         </button>
       </div>
       <div id="p2wrap" style="display:none;margin-top:12px;">
-        <label class="lbl">Second player name</label>
-        <input class="inp" id="p2name" placeholder="Enter name..." maxlength="14" inputmode="text"/>
+        <label class="lbl" id="t-p2-lbl">اسم اللاعب الثاني</label>
+        <input class="inp" id="p2name" placeholder="أدخل الاسم..." maxlength="14" inputmode="text"/>
       </div>
     </div>
 
-    <button class="go-btn" onclick="startGame()">Start game →</button>
-    
-    <a href="index.html" class="back-link">Back to main menu</a>
+    <button class="go-btn" id="t-start-btn" onclick="startGame()">ابدأ اللعبة ←</button>
+    <a href="index.html" class="back-link" id="t-back-home1">رجوع للقائمة الرئيسية</a>
   </div>
 
   <div class="screen" id="gs">
     <div class="topbar">
-      <span class="top-title">X O</span>
-      <div class="toggle" onclick="toggleTheme()">
-        <span id="te2">🌙</span>
-        <div class="toggle-track"><div class="toggle-thumb"></div></div>
-        <span class="toggle-icon" id="tl2">Dark</span>
+      <span class="top-title" id="t-game-title2">لعبة X O</span>
+      <div class="actions-wrap">
+        <div class="action-btn" onclick="toggleLang()" id="lang-btn2">EN</div>
+        <div class="action-btn" onclick="toggleTheme()">
+          <span id="te2">🌙</span>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </div>
       </div>
     </div>
     <div class="score-row">
       <div class="pcrd" id="cx-c">
-        <div class="pname" id="pxn">You</div>
+        <div class="pname" id="pxn">أنت</div>
         <div class="pscore cx" id="sx">0</div>
       </div>
       <div class="vs-sep">VS</div>
       <div class="pcrd" id="co-c">
-        <div class="pname" id="pon">Computer</div>
+        <div class="pname" id="pon">الكمبيوتر</div>
         <div class="pscore co" id="so">0</div>
       </div>
     </div>
@@ -245,19 +250,21 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
       <div class="board" id="board"></div>
     </div>
     <div class="btn-row">
-      <button class="gbtn" onclick="resetRound()">New round</button>
-      <button class="gbtn" onclick="goHome()">Game settings</button>
+      <button class="gbtn" id="t-new-round-btn" onclick="resetRound()">جولة جديدة</button>
+      <button class="gbtn" id="t-settings-btn" onclick="goHome()">إعدادات اللعبة</button>
     </div>
-    <a href="index.html" class="back-link">Back to main menu</a>
+    <a href="index.html" class="back-link" id="t-back-home2">رجوع للقائمة الرئيسية</a>
   </div>
 
   <div class="screen" id="win-s">
     <div class="topbar">
-      <span class="top-title">X O</span>
-      <div class="toggle" onclick="toggleTheme()">
-        <span id="te3">🌙</span>
-        <div class="toggle-track"><div class="toggle-thumb"></div></div>
-        <span class="toggle-icon" id="tl3">Dark</span>
+      <span class="top-title" id="t-game-title3">لعبة X O</span>
+      <div class="actions-wrap">
+        <div class="action-btn" onclick="toggleLang()" id="lang-btn3">EN</div>
+        <div class="action-btn" onclick="toggleTheme()">
+          <span id="te3">🌙</span>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </div>
       </div>
     </div>
     <div class="win-body" id="win-inner">
@@ -265,10 +272,10 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
       <div class="win-name" id="wname"></div>
       <div class="win-sub" id="wsub"></div>
       <div class="win-acts">
-        <button class="wa pr" onclick="resetRoundFromWin()">New round</button>
-        <button class="wa" onclick="goHome()">Game settings</button>
+        <button class="wa pr" id="t-win-new-round" onclick="resetRoundFromWin()">جولة جديدة</button>
+        <button class="wa" id="t-win-settings" onclick="goHome()">إعدادات اللعبة</button>
       </div>
-      <a href="index.html" class="back-link" style="margin-top:24px;">Back to main menu</a>
+      <a href="index.html" class="back-link" id="t-back-home3" style="margin-top:24px;">رجوع للقائمة الرئيسية</a>
     </div>
   </div>
 
@@ -277,16 +284,105 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
 <script>
 const WINS=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 let board=Array(9).fill(null),cur='X',over=false,mode='ai';
-let scores={X:0,O:0},p1='You',p2='Computer',isLight=false;
+let scores={X:0,O:0},p1='أنت',p2='الكمبيوتر',isLight=false;
+let lang = localStorage.getItem('lang') || 'ar';
 let ctx;
+
+const translations = {
+  ar: {
+    gameTitle: "لعبة X O",
+    p1Lbl: "اسمك",
+    p1Plh: "أدخل اسمك...",
+    modeLbl: "طريقة اللعب",
+    modeAi: "ضد الكمبيوتر",
+    mode2p: "لاعبان",
+    p2Lbl: "اسم اللاعب الثاني",
+    p2Plh: "أدخل الاسم...",
+    startBtn: "ابدأ اللعبة ←",
+    backHome: "رجوع للقائمة الرئيسية",
+    you: "أنت",
+    computer: "الكمبيوتر",
+    newRound: "جولة جديدة",
+    settings: "إعدادات اللعبة",
+    turn: "دور",
+    wins: "يفوز!",
+    draw: "تعادل!",
+    langBtn: "EN"
+  },
+  en: {
+    gameTitle: "X O Game",
+    p1Lbl: "Your Name",
+    p1Plh: "Enter your name...",
+    modeLbl: "Game Mode",
+    modeAi: "vs Computer",
+    mode2p: "2 Players",
+    p2Lbl: "Player 2 Name",
+    p2Plh: "Enter name...",
+    startBtn: "Start Game ←",
+    backHome: "Back to Main Menu",
+    you: "You",
+    computer: "Computer",
+    newRound: "New Round",
+    settings: "Game Settings",
+    turn: "Turn",
+    wins: "Wins!",
+    draw: "Draw!",
+    langBtn: "AR"
+  }
+};
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  localStorage.setItem('lang', lang);
+
+  // تحديث العناوين في الصفحة
+  document.getElementById('page-title').textContent = translations[lang].gameTitle;
+  document.getElementById('t-game-title').textContent = translations[lang].gameTitle;
+  document.getElementById('t-game-title2').textContent = translations[lang].gameTitle;
+  document.getElementById('t-game-title3').textContent = translations[lang].gameTitle;
+
+  // تحديث النصوص في شاشة البداية
+  document.getElementById('t-p1-lbl').textContent = translations[lang].p1Lbl;
+  document.getElementById('p1name').placeholder = translations[lang].p1Plh;
+  document.getElementById('t-mode-lbl').textContent = translations[lang].modeLbl;
+  document.getElementById('t-mode-ai').textContent = translations[lang].modeAi;
+  document.getElementById('t-mode-2p').textContent = translations[lang].mode2p;
+  document.getElementById('t-p2-lbl').textContent = translations[lang].p2Lbl;
+  document.getElementById('p2name').placeholder = translations[lang].p2Plh;
+  document.getElementById('t-start-btn').textContent = translations[lang].startBtn;
+  document.getElementById('t-back-home1').textContent = translations[lang].backHome;
+  document.getElementById('t-back-home2').textContent = translations[lang].backHome;
+  document.getElementById('t-back-home3').textContent = translations[lang].backHome;
+
+  // تحديث النصوص في شاشة اللعب
+  document.getElementById('t-new-round-btn').textContent = translations[lang].newRound;
+  document.getElementById('t-settings-btn').textContent = translations[lang].settings;
+  
+  // شاشة الفوز
+  document.getElementById('t-win-new-round').textContent = translations[lang].newRound;
+  document.getElementById('t-win-settings').textContent = translations[lang].settings;
+
+  // تحديث أزرار اللغات
+  document.getElementById('lang-btn').textContent = translations[lang].langBtn;
+  document.getElementById('lang-btn2').textContent = translations[lang].langBtn;
+  document.getElementById('lang-btn3').textContent = translations[lang].langBtn;
+
+  updateStatus();
+}
+
+function toggleLang() {
+  lang = lang === 'ar' ? 'en' : 'ar';
+  applyLang();
+}
 
 function toggleTheme(){
   isLight=!isLight;
   document.getElementById('app').classList.toggle('light',isLight);
-  const e=isLight?'☀️':'🌙',l=isLight?'Light':'Dark';
+  const e=isLight?'☀️':'🌙';
   for(let i=1;i<=3;i++){
-    const el=document.getElementById('te'+i),ll=document.getElementById('tl'+i);
-    if(el)el.textContent=e;if(ll)ll.textContent=l;
+    const el=document.getElementById('te'+i);
+    if(el) el.textContent=e;
   }
 }
 
@@ -317,8 +413,9 @@ function show(id){
 }
 
 function startGame(){
-  p1=document.getElementById('p1name').value.trim()||'Player X';
-  p2=mode==='ai'?'Computer':(document.getElementById('p2name').value.trim()||'Player O');
+  p1=document.getElementById('p1name').value.trim()||(lang==='ar'?'لاعب X':'Player X');
+  p2=mode==='ai'?(lang==='ar'?'الكمبيوتر':'Computer'):(document.getElementById('p2name').value.trim()||(lang==='ar'?'لاعب O':'Player O'));
+  
   document.getElementById('pxn').textContent=p1;
   document.getElementById('pon').textContent=p2;
   scores={X:0,O:0};
@@ -352,7 +449,7 @@ function updateStatus(){
   co.className='pcrd'+(cur==='O'&&!over?' ao':'');
   if(!over){
     const name=cur==='X'?p1:p2,cls=cur==='X'?'sx':'so';
-    document.getElementById('st').innerHTML=`Turn <span class="${cls}">${name}</span>`;
+    document.getElementById('st').innerHTML=`${translations[lang].turn} <span class="${cls}">${name}</span>`;
   }
 }
 
@@ -395,7 +492,7 @@ function aiMove(){if(over)return;const mv=getBest([...board]);if(mv!==-1)play(mv
 function showWin(w){
   const name=w==='X'?p1:p2;
   document.getElementById('wemoji').textContent=w==='X'?'🎉':'🤖';
-  document.getElementById('wname').textContent=`${name} wins!`;
+  document.getElementById('wname').textContent=`${name} ${translations[lang].wins}`;
   document.getElementById('wname').className='win-name '+(w==='X'?'cx':'co');
   document.getElementById('wsub').textContent=`X: ${scores.X}  ·  O: ${scores.O}`;
   spawnConfetti();
@@ -403,7 +500,7 @@ function showWin(w){
 }
 function showDraw(){
   document.getElementById('wemoji').textContent='🤝';
-  document.getElementById('wname').textContent='Draw!';
+  document.getElementById('wname').textContent=translations[lang].draw;
   document.getElementById('wname').className='win-name';
   document.getElementById('wsub').textContent=`X: ${scores.X}  ·  O: ${scores.O}`;
   show('win-s');
@@ -427,6 +524,8 @@ function resetRound(init=false){
 function resetRoundFromWin(){resetRound();show('gs');}
 function goHome(){resetRound();show('ws');}
 
+// تطبيق اللغة المحفوظة تلقائياً عند تحميل الصفحة
+applyLang();
 renderBoard();
 </script>
 </body>
