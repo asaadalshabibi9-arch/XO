@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
-<title> X O</title>
+<title>X O Game</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -183,11 +183,11 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
   <!-- ══ Welcome ══ -->
   <div class="screen active" id="ws">
     <div class="topbar">
-      <span class="top-title">إكس أو</span>
+      <span class="top-title">X O</span>
       <div class="toggle" onclick="toggleTheme()" id="tog1">
         <span id="te1">🌙</span>
         <div class="toggle-track"><div class="toggle-thumb"></div></div>
-        <span class="toggle-icon" id="tl1">داكن</span>
+        <span class="toggle-icon" id="tl1">Dark</span>
       </div>
     </div>
 
@@ -196,47 +196,47 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
     </div>
 
     <div class="card">
-      <label class="lbl">اسمك</label>
-      <input class="inp" id="p1name" placeholder="أدخل اسمك..." maxlength="14" inputmode="text"/>
+      <label class="lbl">Your name</label>
+      <input class="inp" id="p1name" placeholder="Enter your name..." maxlength="14" inputmode="text"/>
     </div>
 
     <div class="card">
-      <label class="lbl">طريقة اللعب</label>
+      <label class="lbl">Play mode</label>
       <div class="mode-row">
         <button class="mbtn sel" onclick="setMode('ai')" id="m-ai">
-          <span class="micon">🤖</span>ضد الكمبيوتر
+          <span class="micon">🤖</span>vs Computer
         </button>
         <button class="mbtn" onclick="setMode('2p')" id="m-2p">
-          <span class="micon">🤝</span>لاعبان
+          <span class="micon">🤝</span>Two players
         </button>
       </div>
       <div id="p2wrap" style="display:none;margin-top:12px;">
-        <label class="lbl">اسم اللاعب الثاني</label>
-        <input class="inp" id="p2name" placeholder="أدخل الاسم..." maxlength="14" inputmode="text"/>
+        <label class="lbl">Second player name</label>
+        <input class="inp" id="p2name" placeholder="Enter name..." maxlength="14" inputmode="text"/>
       </div>
     </div>
 
-    <button class="go-btn" onclick="startGame()">ابدأ اللعبة ←</button>
+    <button class="go-btn" onclick="startGame()">Start game →</button>
   </div>
 
   <!-- ══ Game ══ -->
   <div class="screen" id="gs">
     <div class="topbar">
-      <span class="top-title">إكس أو</span>
+      <span class="top-title">X O</span>
       <div class="toggle" onclick="toggleTheme()">
         <span id="te2">🌙</span>
         <div class="toggle-track"><div class="toggle-thumb"></div></div>
-        <span class="toggle-icon" id="tl2">داكن</span>
+        <span class="toggle-icon" id="tl2">Dark</span>
       </div>
     </div>
     <div class="score-row">
       <div class="pcrd" id="cx-c">
-        <div class="pname" id="pxn">أنت</div>
+        <div class="pname" id="pxn">You</div>
         <div class="pscore cx" id="sx">0</div>
       </div>
       <div class="vs-sep">VS</div>
       <div class="pcrd" id="co-c">
-        <div class="pname" id="pon">كمبيوتر</div>
+        <div class="pname" id="pon">Computer</div>
         <div class="pscore co" id="so">0</div>
       </div>
     </div>
@@ -245,19 +245,19 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
       <div class="board" id="board"></div>
     </div>
     <div class="btn-row">
-      <button class="gbtn" onclick="resetRound()">جولة جديدة</button>
-      <button class="gbtn" onclick="goHome()">القائمة</button>
+      <button class="gbtn" onclick="resetRound()">New round</button>
+      <button class="gbtn" onclick="goHome()">Menu</button>
     </div>
   </div>
 
   <!-- ══ Win ══ -->
   <div class="screen" id="win-s">
     <div class="topbar">
-      <span class="top-title">إكس أو</span>
+      <span class="top-title">X O</span>
       <div class="toggle" onclick="toggleTheme()">
         <span id="te3">🌙</span>
         <div class="toggle-track"><div class="toggle-thumb"></div></div>
-        <span class="toggle-icon" id="tl3">داكن</span>
+        <span class="toggle-icon" id="tl3">Dark</span>
       </div>
     </div>
     <div class="win-body" id="win-inner">
@@ -265,8 +265,8 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
       <div class="win-name" id="wname"></div>
       <div class="win-sub" id="wsub"></div>
       <div class="win-acts">
-        <button class="wa pr" onclick="resetRoundFromWin()">جولة جديدة</button>
-        <button class="wa" onclick="goHome()">القائمة</button>
+        <button class="wa pr" onclick="resetRoundFromWin()">New round</button>
+        <button class="wa" onclick="goHome()">Menu</button>
       </div>
     </div>
   </div>
@@ -276,14 +276,14 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
 <script>
 const WINS=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 let board=Array(9).fill(null),cur='X',over=false,mode='ai';
-let scores={X:0,O:0},p1='أنت',p2='كمبيوتر',isLight=false;
+let scores={X:0,O:0},p1='You',p2='Computer',isLight=false;
 let ctx;
 
 /* ── Theme ── */
 function toggleTheme(){
   isLight=!isLight;
   document.getElementById('app').classList.toggle('light',isLight);
-  const e=isLight?'☀️':'🌙',l=isLight?'فاتح':'داكن';
+  const e=isLight?'☀️':'🌙',l=isLight?'Light':'Dark';
   for(let i=1;i<=3;i++){
     const el=document.getElementById('te'+i),ll=document.getElementById('tl'+i);
     if(el)el.textContent=e;if(ll)ll.textContent=l;
@@ -321,8 +321,8 @@ function show(id){
 
 /* ── Start ── */
 function startGame(){
-  p1=document.getElementById('p1name').value.trim()||'لاعب X';
-  p2=mode==='ai'?'كمبيوتر':(document.getElementById('p2name').value.trim()||'لاعب O');
+  p1=document.getElementById('p1name').value.trim()||'Player X';
+  p2=mode==='ai'?'Computer':(document.getElementById('p2name').value.trim()||'Player O');
   document.getElementById('pxn').textContent=p1;
   document.getElementById('pon').textContent=p2;
   scores={X:0,O:0};
@@ -359,7 +359,7 @@ function updateStatus(){
   co.className='pcrd'+(cur==='O'&&!over?' ao':'');
   if(!over){
     const name=cur==='X'?p1:p2,cls=cur==='X'?'sx':'so';
-    document.getElementById('st').innerHTML=`دور <span class="${cls}">${name}</span>`;
+    document.getElementById('st').innerHTML=`Turn <span class="${cls}">${name}</span>`;
   }
 }
 
@@ -405,7 +405,7 @@ function aiMove(){if(over)return;const mv=getBest([...board]);if(mv!==-1)play(mv
 function showWin(w){
   const name=w==='X'?p1:p2;
   document.getElementById('wemoji').textContent=w==='X'?'🎉':'🤖';
-  document.getElementById('wname').textContent=`${name} يفوز!`;
+  document.getElementById('wname').textContent=`${name} wins!`;
   document.getElementById('wname').className='win-name '+(w==='X'?'cx':'co');
   document.getElementById('wsub').textContent=`X: ${scores.X}  ·  O: ${scores.O}`;
   spawnConfetti(w==='X'?'var(--x)':'var(--o)');
@@ -413,7 +413,7 @@ function showWin(w){
 }
 function showDraw(){
   document.getElementById('wemoji').textContent='🤝';
-  document.getElementById('wname').textContent='تعادل!';
+  document.getElementById('wname').textContent='Draw!';
   document.getElementById('wname').className='win-name';
   document.getElementById('wsub').textContent=`X: ${scores.X}  ·  O: ${scores.O}`;
   show('win-s');
