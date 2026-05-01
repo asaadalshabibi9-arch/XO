@@ -16,6 +16,7 @@
   --text2:#b0a89e;
   --text3:#5a5450;
   --x:#e07a5f;
+  --o:#5b8ccc;
   --shadow:0 4px 24px rgba(0,0,0,.5);
   --radius:16px;
 }
@@ -27,22 +28,24 @@
   --text:#1a1614;
   --text2:#6a6058;
   --text3:#aaa49e;
+  --x:#c4593c;
+  --o:#2e69b0;
   --shadow:0 4px 24px rgba(0,0,0,.1);
 }
 
 html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
 
 .gw{
-  width:100%;max-width:420px;margin:0 auto;
+  width:100%;max-width:440px;margin:0 auto;
   padding:16px 16px max(16px, env(safe-area-inset-bottom));
   padding-top:max(16px, env(safe-area-inset-top));
   color:var(--text);background:var(--bg);
   min-height:100vh;display:flex;flex-direction:column;
-  transition:background .3s,color .3s;
+  transition:background .25s,color .25s;
 }
 
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:8px;}
-.top-title{font-size:20px;font-weight:800;letter-spacing:.03em;color:var(--text);}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.top-title{font-size:22px;font-weight:800;letter-spacing:.05em;color:var(--text);}
 .actions-wrap{display:flex;align-items:center;gap:8px;}
 
 .action-btn{display:flex;align-items:center;gap:6px;cursor:pointer;
@@ -57,90 +60,92 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
   border-radius:50%;background:var(--text3);transition:transform .25s,background .25s;}
 .light .toggle-thumb{transform:translateX(14px);background:#fff;}
 
-.menu-subtitle{font-size:14px;color:var(--text2);margin-bottom:24px;font-weight:500;}
-.games-list{display:flex;flex-direction:column;gap:14px;flex:1;}
-.game-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
-  padding:18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;
-  text-decoration:none;transition:background .2s, border-color .2s, transform .15s;box-shadow:var(--shadow);}
-.game-card:active{transform:scale(.98);background:var(--bg3);}
-.game-info{display:flex;align-items:center;gap:16px;}
-.game-icon{font-size:32px;}
-.game-name{font-size:18px;font-weight:700;color:var(--text);margin-bottom:2px;}
-.game-desc{font-size:12px;color:var(--text2);font-weight:500;}
-.arrow-icon{font-size:18px;color:var(--text3);transition:transform .2s;}
-html[dir="rtl"] .arrow-icon {transform: rotate(180deg);}
+.menu-subtitle{font-size:14px;color:var(--text2);margin-bottom:20px;font-weight:500;}
 
-.game-card.disabled{cursor:default;opacity:0.6;background:var(--bg2);border-style:dashed;}
-.game-card.disabled:active{transform:none;}
-.badge{background:var(--bg3);color:var(--text2);font-size:11px;padding:4px 8px;border-radius:6px;font-weight:700;}
+.games-list{display:flex;flex-direction:column;gap:12px;flex:1;}
+
+.game-card{display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;text-decoration:none;color:var(--text);transition:all .2s ease;
+  box-shadow:var(--shadow);cursor:pointer;}
+.game-card:active{transform:scale(.98);background:var(--bg3);}
+
+.game-info{display:flex;align-items:center;gap:14px;}
+.game-icon{font-size:32px;display:flex;align-items:center;justify-content:center;
+  background:var(--bg3);width:54px;height:54px;border-radius:12px;border:1px solid var(--border);}
+
+.game-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.game-desc{font-size:12px;color:var(--text2);font-weight:500;}
+
+.arrow-icon{font-size:18px;color:var(--text3);font-weight:700;transition:color .2s;}
+.game-card:hover .arrow-icon{color:var(--x);}
 </style>
 </head>
 <body>
 <div class="gw" id="app">
 
   <div class="topbar">
-    <span class="top-title" id="t-title">منصة الألعاب</span>
+    <span class="top-title" id="t-main-title">منصة الألعاب</span>
     <div class="actions-wrap">
       <div class="action-btn" onclick="toggleLang()" id="lang-btn">EN</div>
-      
       <div class="action-btn" onclick="toggleTheme()">
         <span id="te0">🌙</span>
         <div class="toggle-track"><div class="toggle-thumb"></div></div>
       </div>
     </div>
   </div>
-  
-  <p class="menu-subtitle" id="t-subtitle">اختر اللعبة التي تريد لعبها:</p>
+
+  <p class="menu-subtitle" id="t-subtitle">اختر اللعبة التي تريد الاستمتاع بها:</p>
 
   <div class="games-list">
+    
     <a href="xo.html" class="game-card">
       <div class="game-info">
         <span class="game-icon">❌</span>
         <div>
-          <h2 class="game-name" id="t-g1-title">إكس أو (X O)</h2>
-          <p class="game-desc" id="t-g1-desc">العب ضد الكمبيوتر أو لاعبين</p>
+          <h2 class="game-name" id="t-g1-title">إكس أو (Tic Tac Toe)</h2>
+          <p class="game-desc" id="t-g1-desc">العب ضد صديقك أو ضد الذكاء الاصطناعي</p>
         </div>
       </div>
       <span class="arrow-icon">→</span>
     </a>
 
-    <div class="game-card disabled">
+    <a href="mafia.html" class="game-card">
       <div class="game-info">
-        <span class="game-icon">🎮</span>
+        <span class="game-icon">🕵️‍♂️</span>
         <div>
-          <h2 class="game-name" id="t-g2-title">لعبة جديدة</h2>
-          <p class="game-desc" id="t-g2-desc">انتظرونا في التحديث القادم</p>
+          <h2 class="game-name" id="t-g2-title">المافيا (Mafia)</h2>
+          <p class="game-desc" id="t-g2-desc">لعبة الذكاء والاستنتاج الجماعية</p>
         </div>
       </div>
-      <span class="badge" id="t-badge">قريباً</span>
-    </div>
+      <span class="arrow-icon">→</span>
+    </a>
+
   </div>
 
 </div>
 
 <script>
-let isLight = false;
 let lang = localStorage.getItem('lang') || 'ar';
+let isLight = false;
 
 const translations = {
   ar: {
-    title: "منصة الألعاب",
-    subtitle: "اختر اللعبة التي تريد لعبها:",
-    g1Title: "إكس أو (X O)",
-    g1Desc: "العب ضد الكمبيوتر أو لاعبين",
-    g2Title: "لعبة جديدة",
-    g2Desc: "انتظرونا في التحديث القادم",
-    badge: "قريباً",
+    mainTitle: "منصة الألعاب",
+    subtitle: "اختر اللعبة التي تريد الاستمتاع بها:",
+    g1Title: "إكس أو (Tic Tac Toe)",
+    g1Desc: "العب ضد صديقك أو ضد الذكاء الاصطناعي",
+    g2Title: "المافيا (Mafia)",
+    g2Desc: "لعبة الذكاء والاستنتاج الجماعية",
     langBtn: "EN"
   },
   en: {
-    title: "Games Portal",
-    subtitle: "Select the game you want to play:",
-    g1Title: "Tic Tac Toe (X O)",
-    g1Desc: "Play against AI or a friend",
-    g2Title: "New Game",
-    g2Desc: "Coming soon in the next update",
-    badge: "Soon",
+    mainTitle: "Games Platform",
+    subtitle: "Choose the game you want to play:",
+    g1Title: "X O (Tic Tac Toe)",
+    g1Desc: "Play against a friend or the AI",
+    g2Title: "Mafia Game",
+    g2Desc: "Social deduction and intelligence game",
     langBtn: "AR"
   }
 };
@@ -148,18 +153,16 @@ const translations = {
 function applyLang() {
   document.documentElement.lang = lang;
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-  
-  document.getElementById('page-title').textContent = translations[lang].title;
-  document.getElementById('t-title').textContent = translations[lang].title;
+  localStorage.setItem('lang', lang);
+
+  document.getElementById('page-title').textContent = translations[lang].mainTitle;
+  document.getElementById('t-main-title').textContent = translations[lang].mainTitle;
   document.getElementById('t-subtitle').textContent = translations[lang].subtitle;
   document.getElementById('t-g1-title').textContent = translations[lang].g1Title;
   document.getElementById('t-g1-desc').textContent = translations[lang].g1Desc;
   document.getElementById('t-g2-title').textContent = translations[lang].g2Title;
   document.getElementById('t-g2-desc').textContent = translations[lang].g2Desc;
-  document.getElementById('t-badge').textContent = translations[lang].badge;
   document.getElementById('lang-btn').textContent = translations[lang].langBtn;
-  
-  localStorage.setItem('lang', lang);
 }
 
 function toggleLang() {
@@ -173,7 +176,7 @@ function toggleTheme() {
   document.getElementById('te0').textContent = isLight ? '☀️' : '🌙';
 }
 
-// تطبيق اللغة المحفوظة عند تحميل الصفحة
+// تطبيق اللغة عند تحميل الصفحة
 applyLang();
 </script>
 </body>
