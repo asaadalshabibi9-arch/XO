@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
-<title>Games Platform</title>
+<title id="page-title">منصة الألعاب</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -41,19 +41,21 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
   transition:background .3s,color .3s;
 }
 
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
-.top-title{font-size:22px;font-weight:800;letter-spacing:.05em;color:var(--text);}
-.toggle{display:flex;align-items:center;gap:8px;cursor:pointer;
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:8px;}
+.top-title{font-size:20px;font-weight:800;letter-spacing:.03em;color:var(--text);}
+.actions-wrap{display:flex;align-items:center;gap:8px;}
+
+.action-btn{display:flex;align-items:center;gap:6px;cursor:pointer;
   background:var(--bg2);border:1px solid var(--border);
-  border-radius:50px;padding:6px 14px;transition:background .25s,border-color .25s;
-  user-select:none;}
-.toggle-icon{font-size:14px;}
-.toggle-track{width:36px;height:20px;border-radius:10px;background:var(--border);
+  border-radius:50px;padding:6px 12px;transition:background .25s,border-color .25s;
+  user-select:none;font-size:12px;font-weight:700;color:var(--text2);}
+
+.toggle-track{width:32px;height:18px;border-radius:10px;background:var(--border);
   position:relative;transition:background .25s;flex-shrink:0;}
 .light .toggle-track{background:#bbb;}
-.toggle-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;
+.toggle-thumb{position:absolute;top:2px;left:2px;width:14px;height:14px;
   border-radius:50%;background:var(--text3);transition:transform .25s,background .25s;}
-.light .toggle-thumb{transform:translateX(16px);background:#fff;}
+.light .toggle-thumb{transform:translateX(14px);background:#fff;}
 
 .menu-subtitle{font-size:14px;color:var(--text2);margin-bottom:24px;font-weight:500;}
 .games-list{display:flex;flex-direction:column;gap:14px;flex:1;}
@@ -66,7 +68,7 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
 .game-name{font-size:18px;font-weight:700;color:var(--text);margin-bottom:2px;}
 .game-desc{font-size:12px;color:var(--text2);font-weight:500;}
 .arrow-icon{font-size:18px;color:var(--text3);transition:transform .2s;}
-.game-card:hover .arrow-icon{transform:translateX(-4px);color:var(--x);}
+html[dir="rtl"] .arrow-icon {transform: rotate(180deg);}
 
 .game-card.disabled{cursor:default;opacity:0.6;background:var(--bg2);border-style:dashed;}
 .game-card.disabled:active{transform:none;}
@@ -77,23 +79,26 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
 <div class="gw" id="app">
 
   <div class="topbar">
-    <span class="top-title">Games Platform</span>
-    <div class="toggle" onclick="toggleTheme()">
-      <span id="te0">🌙</span>
-      <div class="toggle-track"><div class="toggle-thumb"></div></div>
-      <span class="toggle-icon" id="tl0">Dark</span>
+    <span class="top-title" id="t-title">منصة الألعاب</span>
+    <div class="actions-wrap">
+      <div class="action-btn" onclick="toggleLang()" id="lang-btn">EN</div>
+      
+      <div class="action-btn" onclick="toggleTheme()">
+        <span id="te0">🌙</span>
+        <div class="toggle-track"><div class="toggle-thumb"></div></div>
+      </div>
     </div>
   </div>
   
-  <p class="menu-subtitle">Choose the game you want to play:</p>
+  <p class="menu-subtitle" id="t-subtitle">اختر اللعبة التي تريد لعبها:</p>
 
   <div class="games-list">
     <a href="xo.html" class="game-card">
       <div class="game-info">
         <span class="game-icon">❌</span>
         <div>
-          <h2 class="game-name">X O (Tic Tac Toe)</h2>
-          <p class="game-desc">Play against the computer or a friend</p>
+          <h2 class="game-name" id="t-g1-title">إكس أو (X O)</h2>
+          <p class="game-desc" id="t-g1-desc">العب ضد الكمبيوتر أو لاعبين</p>
         </div>
       </div>
       <span class="arrow-icon">→</span>
@@ -103,24 +108,73 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
       <div class="game-info">
         <span class="game-icon">🎮</span>
         <div>
-          <h2 class="game-name">New Game</h2>
-          <p class="game-desc">Coming soon in the next update</p>
+          <h2 class="game-name" id="t-g2-title">لعبة جديدة</h2>
+          <p class="game-desc" id="t-g2-desc">انتظرونا في التحديث القادم</p>
         </div>
       </div>
-      <span class="badge">Soon</span>
+      <span class="badge" id="t-badge">قريباً</span>
     </div>
   </div>
 
 </div>
 
 <script>
-let isLight=false;
-function toggleTheme(){
-  isLight=!isLight;
-  document.getElementById('app').classList.toggle('light',isLight);
-  document.getElementById('te0').textContent=isLight?'☀️':'🌙';
-  document.getElementById('tl0').textContent=isLight?'Light':'Dark';
+let isLight = false;
+let lang = localStorage.getItem('lang') || 'ar';
+
+const translations = {
+  ar: {
+    title: "منصة الألعاب",
+    subtitle: "اختر اللعبة التي تريد لعبها:",
+    g1Title: "إكس أو (X O)",
+    g1Desc: "العب ضد الكمبيوتر أو لاعبين",
+    g2Title: "لعبة جديدة",
+    g2Desc: "انتظرونا في التحديث القادم",
+    badge: "قريباً",
+    langBtn: "EN"
+  },
+  en: {
+    title: "Games Portal",
+    subtitle: "Select the game you want to play:",
+    g1Title: "Tic Tac Toe (X O)",
+    g1Desc: "Play against AI or a friend",
+    g2Title: "New Game",
+    g2Desc: "Coming soon in the next update",
+    badge: "Soon",
+    langBtn: "AR"
+  }
+};
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  
+  document.getElementById('page-title').textContent = translations[lang].title;
+  document.getElementById('t-title').textContent = translations[lang].title;
+  document.getElementById('t-subtitle').textContent = translations[lang].subtitle;
+  document.getElementById('t-g1-title').textContent = translations[lang].g1Title;
+  document.getElementById('t-g1-desc').textContent = translations[lang].g1Desc;
+  document.getElementById('t-g2-title').textContent = translations[lang].g2Title;
+  document.getElementById('t-g2-desc').textContent = translations[lang].g2Desc;
+  document.getElementById('t-badge').textContent = translations[lang].badge;
+  document.getElementById('lang-btn').textContent = translations[lang].langBtn;
+  
+  localStorage.setItem('lang', lang);
 }
+
+function toggleLang() {
+  lang = lang === 'ar' ? 'en' : 'ar';
+  applyLang();
+}
+
+function toggleTheme() {
+  isLight = !isLight;
+  document.getElementById('app').classList.toggle('light', isLight);
+  document.getElementById('te0').textContent = isLight ? '☀️' : '🌙';
+}
+
+// تطبيق اللغة المحفوظة عند تحميل الصفحة
+applyLang();
 </script>
 </body>
 </html>
