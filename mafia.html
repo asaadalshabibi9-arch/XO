@@ -104,11 +104,13 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
   font-size:14px;font-weight:700;margin-top:18px;transition:color .2s;}
 .back-link:active{color:var(--x);}
 
-/* قائمة اختيار عدد اللاعبين */
 .number-grid {display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;margin-bottom:8px;}
 .num-btn {background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;
   font-size:16px;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;}
 .num-btn.selected {background:var(--x);color:#fff;border-color:var(--x);box-shadow:0 4px 12px rgba(224,122,95,.2);}
+
+.pass-device-text {font-size:20px;font-weight:800;color:var(--text);margin-bottom:12px;line-height:1.4;}
+.pass-device-p {font-size:14px;color:var(--text2);margin-bottom:28px;font-weight:500;}
 </style>
 </head>
 <body>
@@ -158,6 +160,21 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
 
     <button class="go-btn" id="t-start-btn" onclick="startMafiaGame()">توزيع الأدوار وبدء اللعبة ←</button>
     <button class="sub-btn" style="margin-top:8px;" id="t-back-count-btn" onclick="show('player-count-screen')">تغيير عدد اللاعبين</button>
+  </div>
+
+  <div class="screen" id="pass-screen">
+    <div class="topbar">
+      <span class="top-title" id="t-pass-title">تمرير الهاتف</span>
+    </div>
+    <div class="card" style="flex:1;justify-content:center;text-align:center;">
+      <span style="font-size:64px;margin-bottom:20px;display:block;">📱</span>
+      <h2 class="pass-device-text" id="t-pass-text">مرر الهاتف للاعب التالي</h2>
+      <p class="pass-device-p" id="t-pass-desc">يجب ألا يرى أحد دورك السري.</p>
+      <div style="background:var(--bg3);border-radius:10px;padding:12px;border:1px solid var(--border);font-weight:700;color:var(--x);font-size:18px;display:inline-block;" id="target-player-name-pass">
+        ...
+      </div>
+    </div>
+    <button class="go-btn" id="t-show-role-btn" onclick="showTrueReveal()">أنا جاهز، اكشف دوري ←</button>
   </div>
 
   <div class="screen" id="reveal-screen">
@@ -217,7 +234,7 @@ let players = [];
 let lang = localStorage.getItem('lang') || 'ar';
 let isLight = false;
 
-let selectedTotalPlayers = 4; // الافتراضي
+let selectedTotalPlayers = 4;
 let revealIndex = 0;
 let nightRolesOrder = [];
 let currentNightRoleIndex = 0;
@@ -239,6 +256,10 @@ const translations = {
     startBtn: "توزيع الأدوار وبدء اللعبة ←",
     backHome: "رجوع للقائمة الرئيسية",
     backCountBtn: "تغيير عدد اللاعبين",
+    passTitle: "تمرير الهاتف",
+    passText: "مرر الهاتف للاعب التالي",
+    passDesc: "يجب ألا يرى أحد دورك السري.",
+    showRole: "أنا جاهز، اكشف دوري ←",
     revealTitle: "كشف الدور",
     nextReveal: "فهمت، التالي ←",
     nightTitle: "مرحلة الليل 🌙",
@@ -282,6 +303,10 @@ const translations = {
     startBtn: "Distribute Roles & Start ←",
     backHome: "Back to Main Menu",
     backCountBtn: "Change Player Count",
+    passTitle: "Pass Phone",
+    passText: "Pass the phone to the next player",
+    passDesc: "No one should see your secret role.",
+    showRole: "I am ready, reveal role ←",
     revealTitle: "Reveal Role",
     nextReveal: "Got it, Next ←",
     nightTitle: "Night Phase 🌙",
@@ -334,6 +359,10 @@ function applyLang() {
   document.getElementById('t-back-home0').textContent = translations[lang].backHome;
   document.getElementById('t-back-home2').textContent = translations[lang].backHome;
   document.getElementById('t-back-count-btn').textContent = translations[lang].backCountBtn;
+  document.getElementById('t-pass-title').textContent = translations[lang].passTitle;
+  document.getElementById('t-pass-text').textContent = translations[lang].passText;
+  document.getElementById('t-pass-desc').textContent = translations[lang].passDesc;
+  document.getElementById('t-show-role-btn').textContent = translations[lang].showRole;
   document.getElementById('t-reveal-title').textContent = translations[lang].revealTitle;
   document.getElementById('t-next-reveal-btn').textContent = translations[lang].nextReveal;
   document.getElementById('t-night-title').textContent = translations[lang].nightTitle;
@@ -363,7 +392,7 @@ function toggleTheme() {
 }
 
 function show(id) {
-  ['player-count-screen','setup-screen','reveal-screen','night-screen','day-screen','end-screen'].forEach(s =>
+  ['player-count-screen','setup-screen','pass-screen','reveal-screen','night-screen','day-screen','end-screen'].forEach(s =>
     document.getElementById(s).className = 'screen' + (s === id ? ' active' : ''));
 }
 
@@ -421,12 +450,9 @@ function renderPlayersUI() {
   document.getElementById('added-count').textContent = players.length;
 }
 
-// إنشاء الأدوار بناءً على العدد لضمان التوازن
 function buildRoles() {
   let roles = [];
   let n = selectedTotalPlayers;
-
-  // تحديد عدد المافيا بناءً على حجم المجموعة
   let mafiaCount = 1;
   if (n >= 6 && n <= 8) mafiaCount = 2;
   if (n >= 9) mafiaCount = 3;
@@ -454,33 +480,41 @@ function startMafiaGame() {
   });
 
   revealIndex = 0;
-  showRevealPhase();
+  showPassScreen();
 }
 
-function showRevealPhase() {
+// الخطوة الذكية: شاشة تمرير الجوال قبل كشف الدور
+function showPassScreen() {
   if (revealIndex < players.length) {
-    show('reveal-screen');
+    show('pass-screen');
     const p = players[revealIndex];
-    let emoji = '🦹‍♂️', roleName = translations[lang].mafia, desc = translations[lang].mafiaDesc;
-
-    if (p.role === 'doctor') { emoji = '🏥'; roleName = translations[lang].doctor; desc = translations[lang].doctorDesc; }
-    if (p.role === 'detective') { emoji = '🔍'; roleName = translations[lang].detective; desc = translations[lang].detectiveDesc; }
-    if (p.role === 'citizen') { emoji = '🟢'; roleName = translations[lang].citizen; desc = translations[lang].citizenDesc; }
-
-    document.getElementById('reveal-content').innerHTML = `
-      <p style="font-size:16px;color:var(--text2);font-weight:700;">${p.name}</p>
-      <span class="role-emoji">${emoji}</span>
-      <h2 class="role-name">${roleName}</h2>
-      <p class="role-desc">${desc}</p>
-    `;
+    document.getElementById('target-player-name-pass').textContent = p.name;
   } else {
     startNightPhase();
   }
 }
 
+// عرض دور اللاعب بعد استلام الهاتف والضغط على الزر
+function showTrueReveal() {
+  show('reveal-screen');
+  const p = players[revealIndex];
+  let emoji = '🦹‍♂️', roleName = translations[lang].mafia, desc = translations[lang].mafiaDesc;
+
+  if (p.role === 'doctor') { emoji = '🏥'; roleName = translations[lang].doctor; desc = translations[lang].doctorDesc; }
+  if (p.role === 'detective') { emoji = '🔍'; roleName = translations[lang].detective; desc = translations[lang].detectiveDesc; }
+  if (p.role === 'citizen') { emoji = '🟢'; roleName = translations[lang].citizen; desc = translations[lang].citizenDesc; }
+
+  document.getElementById('reveal-content').innerHTML = `
+    <p style="font-size:16px;color:var(--text2);font-weight:700;">${p.name}</p>
+    <span class="role-emoji">${emoji}</span>
+    <h2 class="role-name">${roleName}</h2>
+    <p class="role-desc">${desc}</p>
+  `;
+}
+
 function nextReveal() {
   revealIndex++;
-  showRevealPhase();
+  showPassScreen();
 }
 
 function startNightPhase() {
@@ -551,7 +585,6 @@ function confirmNightAction() {
 function resolveNightResult() {
   let deathMsg = "";
   
-  // التصويت على قتل لاعب واحد بواسطة المافيا (الهدف الأكثر اختياراً أو الاختيار الأخير)
   if (mafiaTargets.length > 0) {
     let targeted = mafiaTargets[mafiaTargets.length - 1]; 
     if (targeted && targeted !== doctorTarget) {
