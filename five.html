@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+<title id="page-title">تحدي الـ 5 ثواني</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#0c0c0c;
+  --bg2:#161616;
+  --bg3:#1f1f1f;
+  --border:#2a2a2a;
+  --text:#f2ede8;
+  --text2:#b0a89e;
+  --text3:#5a5450;
+  --x:#e07a5f;
+  --green:#7bc99a;
+  --shadow:0 4px 24px rgba(0,0,0,.5);
+  --radius:16px;
+}
+.light{
+  --bg:#f0ece6;
+  --bg2:#fff;
+  --bg3:#e8e2da;
+  --border:#d4ccc4;
+  --text:#1a1614;
+  --text2:#6a6058;
+  --text3:#aaa49e;
+  --green:#4a9c6d;
+  --shadow:0 4px 24px rgba(0,0,0,.1);
+}
+
+html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
+
+.gw{
+  width:100%;max-width:420px;margin:0 auto;
+  padding:16px 16px max(16px, env(safe-area-inset-bottom));
+  padding-top:max(16px, env(safe-area-inset-top));
+  color:var(--text);background:var(--bg);
+  min-height:100vh;display:flex;flex-direction:column;
+  transition:background .3s,color .3s;
+}
+
+.screen{display:none;flex-direction:column;flex:1;}
+.screen.active{display:flex;}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.top-title{font-size:20px;font-weight:800;letter-spacing:.05em;color:var(--text);}
+.actions-wrap{display:flex;align-items:center;gap:8px;}
+
+.action-btn{display:flex;align-items:center;gap:6px;cursor:pointer;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:50px;padding:6px 12px;transition:background .25s,border-color .25s;
+  user-select:none;font-size:12px;font-weight:700;color:var(--text2);}
+
+.toggle-track{width:32px;height:18px;border-radius:10px;background:var(--border);
+  position:relative;transition:background .25s;flex-shrink:0;}
+.light .toggle-track{background:#bbb;}
+.toggle-thumb{position:absolute;top:2px;left:2px;width:14px;height:14px;
+  border-radius:50%;background:var(--text3);transition:transform .25s,background .25s;}
+.light .toggle-thumb{transform:translateX(14px);background:#fff;}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;margin-bottom:12px;transition:background .3s,border-color .3s;box-shadow:var(--shadow);}
+.lbl{font-size:12px;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:9px;display:block;font-weight:700;}
+
+.inp{width:100%;background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:10px;color:var(--text);padding:13px 15px;font-size:16px;
+  font-family:'Tajawal',sans-serif;transition:border-color .2s,background .3s;}
+.inp:focus{outline:none;border-color:var(--x);}
+
+.btn-row{display:flex;gap:8px;margin-top:8px;}
+.sub-btn{flex:1;padding:12px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:10px;color:var(--text2);font-weight:700;cursor:pointer;
+  font-family:'Tajawal',sans-serif;font-size:14px;transition:all .2s;}
+.sub-btn:active{transform:scale(.98);background:var(--border);}
+
+.player-item{display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg3);padding:12px 14px;border-radius:10px;margin-bottom:8px;
+  border:1px solid var(--border);font-weight:600;}
+.remove-btn{color:var(--x);cursor:pointer;font-weight:800;font-size:16px;padding:0 4px;}
+
+.go-btn{width:100%;padding:17px;background:var(--x);border:none;border-radius:12px;
+  color:#fff;font-size:17px;font-weight:800;cursor:pointer;
+  font-family:'Tajawal',sans-serif;margin-top:12px;letter-spacing:.03em;
+  transition:opacity .15s,transform .15s;box-shadow:0 4px 20px rgba(224,122,95,.3);text-align:center;}
+.go-btn:active{opacity:.85;transform:scale(.98);}
+
+.question-box{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:24px;text-align:center;margin-bottom:12px;box-shadow:var(--shadow);}
+.current-q{font-size:24px;font-weight:800;color:var(--text);margin-bottom:20px;line-height:1.4;}
+.current-voter{font-size:16px;font-weight:700;color:var(--x);background:rgba(224,122,95,.1);padding:6px 14px;border-radius:50px;border:1px solid var(--border);margin-bottom:20px;}
+
+.sec-display {font-size:64px;font-weight:800;color:var(--x);margin-bottom:12px;}
+
+.action-row {display:flex;gap:12px;margin-top:auto;}
+.game-action-btn {flex:1;padding:18px;border-radius:12px;font-size:16px;font-weight:800;
+  cursor:pointer;font-family:'Tajawal',sans-serif;border:none;color:#fff;transition:all .15s;}
+.game-action-btn:active {transform:scale(.97);}
+.btn-correct {background:var(--green);box-shadow:0 4px 14px rgba(123,201,154,.3);}
+.btn-pass {background:var(--bg3);color:var(--text);border:1px solid var(--border);}
+
+.back-link{display:block;text-align:center;color:var(--text2);text-decoration:none;
+  font-size:14px;font-weight:700;margin-top:18px;transition:color .2s;}
+.back-link:active{color:var(--x);}
+
+.score-item{display:flex;justify-content:space-between;align-items:center;padding:14px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;font-weight:700;}
+</style>
+</head>
+<body>
+<div class="gw" id="app">
+
+  <div class="screen active" id="setup-screen">
+    <div class="topbar">
+      <span class="top-title" id="t-setup-title">تحدي الـ 5 ثواني</span>
+      <div class="actions-wrap">
+        <div class="action-btn" onclick="toggleLang()" id="lang-btn">EN</div>
+        <div class="action-btn" onclick="toggleTheme()">
+          <span id="te0">🌙</span>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <label class="lbl" id="t-add-lbl">إدخال أسماء اللاعبين</label>
+      <input class="inp" id="new-player-name" placeholder="اسم اللاعب..." maxlength="14"/>
+      <div class="btn-row">
+        <button class="sub-btn" id="t-add-btn" onclick="addPlayer()">إضافة</button>
+      </div>
+    </div>
+
+    <div class="card" style="flex:1;">
+      <label class="lbl" id="t-added-lbl">قائمة اللاعبين</label>
+      <div id="players-list-ui"></div>
+    </div>
+
+    <button class="go-btn" id="t-start-game-btn" onclick="startGame()">ابدأ التحدي الآن ←</button>
+    <a href="index.html" class="back-link" id="t-back-home0">رجوع للقائمة الرئيسية</a>
+  </div>
+
+  <div class="screen" id="play-screen">
+    <div class="topbar">
+      <span class="top-title" id="t-play-title">جاوب بسرعة!</span>
+      <span class="action-btn" id="live-round">الجولة: 1</span>
+    </div>
+
+    <div class="question-box">
+      <span class="current-voter" id="active-voter">اسم اللاعب</span>
+      <h1 class="current-q" id="question-display">...</h1>
+      <div class="sec-display" id="sec-timer">5</div>
+    </div>
+
+    <button class="go-btn" style="margin-bottom: 12px; background:var(--x);" id="t-start-timer-btn" onclick="startFiveSeconds()">ابدأ الـ 5 ثواني ⏱️</button>
+
+    <div class="action-row" id="after-timer-actions" style="display: none;">
+      <button class="game-action-btn btn-pass" id="t-fail-btn" onclick="playerAction(false)">إجابة خاطئة/تخطي</button>
+      <button class="game-action-btn btn-correct" id="t-correct-btn" onclick="playerAction(true)">إجابة صحيحة</button>
+    </div>
+  </div>
+
+  <div class="screen" id="end-screen">
+    <div class="topbar">
+      <span class="top-title" id="t-end-title">الترتيب النهائي</span>
+    </div>
+    <div class="card" style="flex:1;">
+      <div id="leaderboard-list"></div>
+    </div>
+    <button class="go-btn" id="t-play-again-btn" onclick="restartGame()">لعب من جديد</button>
+    <a href="index.html" class="back-link" id="t-back-home1">رجوع للقائمة الرئيسية</a>
+  </div>
+
+</div>
+
+<script>
+let players = [];
+let lang = localStorage.getItem('lang') || 'ar';
+let isLight = false;
+
+let questionIndex = 0;
+let playerTurnIndex = 0;
+let currentRound = 1;
+const totalRounds = 3; // كل شخص يأتيه 3 أسئلة في الجولة كاملة
+let timerInterval = null;
+let activeQuestions = [];
+
+const questionsBank = {
+  ar: [
+    "اذكر 3 أنواع من الفواكه", "اذكر 3 ماركات سيارات", "اذكر 3 أشياء تجدها في المطبخ",
+    "اذكر 3 دول عربية", "اذكر 3 أسماء تبدأ بحرف الميم", "اذكر 3 لغات برمجة",
+    "اذكر 3 تطبيقات في هاتفك", "اذكر 3 أشياء تلبسها في الشتاء", "اذكر 3 ألوان تحبها",
+    "اذكر 3 أندية كرة قدم", "اذكر 3 حيوانات برية", "اذكر 3 مدن خليجية",
+    "اذكر 3 أكلات شعبية", "اذكر 3 أشياء تجدها في الحقيبة", "اذكر 3 مواد دراسية",
+    "اذكر 3 أشياء لونها أبيض", "اذكر 3 أشياء تطير", "اذكر 3 وظائف طبية"
+  ],
+  en: [
+    "Name 3 types of fruit", "Name 3 car brands", "Name 3 things in the kitchen",
+    "Name 3 Arab countries", "Name 3 names starting with 'M'", "Name 3 programming languages",
+    "Name 3 apps on your phone", "Name 3 winter clothing items", "Name 3 colors you like",
+    "Name 3 football clubs", "Name 3 wild animals", "Name 3 Gulf cities",
+    "Name 3 popular foods", "Name 3 things in a bag", "Name 3 school subjects",
+    "Name 3 things that are white", "Name 3 things that fly", "Name 3 medical jobs"
+  ]
+};
+
+const translations = {
+  ar: {
+    gameTitle: "تحدي الـ 5 ثواني",
+    setupTitle: "تحدي الـ 5 ثواني",
+    addLbl: "إدخال أسماء اللاعبين",
+    addBtn: "إضافة",
+    addedLbl: "قائمة اللاعبين",
+    startGameBtn: "ابدأ التحدي الآن ←",
+    backHome: "رجوع للقائمة الرئيسية",
+    playTitle: "جاوب بسرعة!",
+    roundText: "الجولة: ",
+    startTimerBtn: "ابدأ الـ 5 ثواني ⏱️",
+    failBtn: "إجابة خاطئة/تخطي",
+    correctBtn: "إجابة صحيحة",
+    endTitle: "الترتيب النهائي",
+    playAgain: "لعب من جديد",
+    langBtn: "EN",
+    nameExist: "هذا الاسم موجود مسبقاً!",
+    fillAlert: "يرجى إضافة لاعبين اثنين على الأقل!"
+  },
+  en: {
+    gameTitle: "5 Second Rule",
+    setupTitle: "5 Second Rule",
+    addLbl: "Enter Player Names",
+    addBtn: "Add",
+    addedLbl: "Players List",
+    startGameBtn: "Start Challenge Now ←",
+    backHome: "Back to Main Menu",
+    playTitle: "Answer Quickly!",
+    roundText: "Round: ",
+    startTimerBtn: "Start 5 Seconds ⏱️",
+    failBtn: "Wrong Answer/Pass",
+    correctBtn: "Correct Answer",
+    endTitle: "Final Standings",
+    playAgain: "Play Again",
+    langBtn: "AR",
+    nameExist: "This name already exists!",
+    fillAlert: "Please add at least 2 players!"
+  }
+};
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  localStorage.setItem('lang', lang);
+
+  document.getElementById('page-title').textContent = translations[lang].gameTitle;
+  document.getElementById('t-setup-title').textContent = translations[lang].setupTitle;
+  document.getElementById('t-add-lbl').textContent = translations[lang].addLbl;
+  document.getElementById('new-player-name').placeholder = lang === 'ar' ? "اسم اللاعب..." : "Player name...";
+  document.getElementById('t-add-btn').textContent = translations[lang].addBtn;
+  document.getElementById('t-added-lbl').textContent = translations[lang].addedLbl;
+  document.getElementById('t-start-game-btn').textContent = translations[lang].startGameBtn;
+  document.getElementById('t-back-home0').textContent = translations[lang].backHome;
+  document.getElementById('t-back-home1').textContent = translations[lang].backHome;
+  document.getElementById('t-play-title').textContent = translations[lang].playTitle;
+  document.getElementById('t-start-timer-btn').textContent = translations[lang].startTimerBtn;
+  document.getElementById('t-fail-btn').textContent = translations[lang].failBtn;
+  document.getElementById('t-correct-btn').textContent = translations[lang].correctBtn;
+  document.getElementById('t-end-title').textContent = translations[lang].endTitle;
+  document.getElementById('t-play-again-btn').textContent = translations[lang].playAgain;
+  document.getElementById('lang-btn').textContent = translations[lang].langBtn;
+
+  renderPlayersUI();
+}
+
+function toggleLang() {
+  lang = lang === 'ar' ? 'en' : 'ar';
+  applyLang();
+}
+
+function toggleTheme() {
+  isLight = !isLight;
+  document.getElementById('app').classList.toggle('light', isLight);
+  document.getElementById('te0').textContent = isLight ? '☀️' : '🌙';
+}
+
+function show(id) {
+  ['setup-screen','play-screen','end-screen'].forEach(s =>
+    document.getElementById(s).className = 'screen' + (s === id ? ' active' : ''));
+}
+
+function addPlayer() {
+  const inp = document.getElementById('new-player-name');
+  const name = inp.value.trim();
+  if (!name) return;
+  if (players.find(p => p.name === name)) {
+    alert(translations[lang].nameExist);
+    return;
+  }
+  players.push({ id: Date.now() + Math.random(), name: name, score: 0 });
+  inp.value = '';
+  renderPlayersUI();
+}
+
+function removePlayer(id) {
+  players = players.filter(p => p.id !== id);
+  renderPlayersUI();
+}
+
+function renderPlayersUI() {
+  const list = document.getElementById('players-list-ui');
+  list.innerHTML = '';
+  players.forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'player-item';
+    d.innerHTML = `<span>${p.name}</span> <span class="remove-btn" onclick="removePlayer(${p.id})">×</span>`;
+    list.appendChild(d);
+  });
+}
+
+function startGame() {
+  if (players.length < 2) {
+    alert(translations[lang].fillAlert);
+    return;
+  }
+
+  // خلط الأسئلة
+  activeQuestions = [...questionsBank[lang]].sort(() => Math.random() - 0.5);
+  questionIndex = 0;
+  playerTurnIndex = 0;
+  currentRound = 1;
+
+  players.forEach(p => p.score = 0);
+
+  show('play-screen');
+  displayQuestion();
+}
+
+function displayQuestion() {
+  document.getElementById('live-round').textContent = translations[lang].roundText + currentRound;
+  document.getElementById('sec-timer').textContent = '5';
+  document.getElementById('t-start-timer-btn').style.display = 'block';
+  document.getElementById('after-timer-actions').style.display = 'none';
+
+  const voter = players[playerTurnIndex];
+  document.getElementById('active-voter').textContent = voter.name;
+
+  if (questionIndex >= activeQuestions.length) {
+    activeQuestions = [...questionsBank[lang]].sort(() => Math.random() - 0.5);
+    questionIndex = 0;
+  }
+
+  document.getElementById('question-display').textContent = activeQuestions[questionIndex];
+}
+
+function startFiveSeconds() {
+  document.getElementById('t-start-timer-btn').style.display = 'none';
+  let counter = 5;
+  document.getElementById('sec-timer').textContent = counter;
+
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    counter--;
+    document.getElementById('sec-timer').textContent = counter;
+
+    if (counter <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('after-timer-actions').style.display = 'flex';
+    }
+  }, 1000);
+}
+
+function playerAction(isCorrect) {
+  if (isCorrect) {
+    players[playerTurnIndex].score++;
+  }
+
+  questionIndex++;
+  playerTurnIndex++;
+
+  if (playerTurnIndex >= players.length) {
+    playerTurnIndex = 0;
+    currentRound++;
+  }
+
+  if (currentRound > totalRounds) {
+    endGame();
+  } else {
+    displayQuestion();
+  }
+}
+
+function endGame() {
+  show('end-screen');
+  const board = document.getElementById('leaderboard-list');
+  board.innerHTML = '';
+
+  // ترتيب اللاعبين حسب الأعلى نقاطاً
+  const sorted = [...players].sort((a, b) => b.score - a.score);
+
+  sorted.forEach((p, idx) => {
+    const item = document.createElement('div');
+    item.className = 'score-item';
+    let medal = idx === 0 ? '🏆 ' : idx === 1 ? '🥈 ' : idx === 2 ? '🥉 ' : '👤 ';
+    item.innerHTML = `<span>${medal} ${p.name}</span> <span>${p.score} ${lang === 'ar' ? 'نقاط' : 'Pts'}</span>`;
+    board.appendChild(item);
+  });
+}
+
+function restartGame() {
+  show('setup-screen');
+}
+
+applyLang();
+</script>
+</body>
+</html>
