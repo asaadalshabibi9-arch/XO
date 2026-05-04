@@ -107,7 +107,7 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
 
     <a href="mafia.html" class="game-card">
       <div class="game-info">
-        <span class="game-icon">🕵️‍♂️</span>
+        <span class="game-icon">👤</span>
         <div>
           <h2 class="game-name" id="t-g2-title">لعبة المافيا (Mafia)</h2>
           <p class="game-desc" id="t-g2-desc">لعبة جماعية وذكية تدعم من 4 إلى 12 لاعباً</p>
@@ -122,6 +122,17 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
         <div>
           <h2 class="game-name" id="t-g3-title">من أنا؟ (Who Am I)</h2>
           <p class="game-desc" id="t-g3-desc">احزر الكلمة من شرح أصدقائك قبل انتهاء الوقت</p>
+        </div>
+      </div>
+      <span class="arrow-icon">←</span>
+    </a>
+
+    <a href="spy.html" class="game-card">
+      <div class="game-info">
+        <span class="game-icon">🕵️‍♂️</span>
+        <div>
+          <h2 class="game-name" id="t-g4-title">من هو الجاسوس؟ (Spy)</h2>
+          <p class="game-desc" id="t-g4-desc">لعبة ذكاء وغموض جماعية لكشف الجاسوس المخفي</p>
         </div>
       </div>
       <span class="arrow-icon">←</span>
@@ -145,6 +156,8 @@ const translations = {
     g2Desc: "لعبة جماعية وذكية تدعم من 4 إلى 12 لاعباً",
     g3Title: "من أنا؟ (Who Am I)",
     g3Desc: "احزر الكلمة من شرح أصدقائك قبل انتهاء الوقت",
+    g4Title: "من هو الجاسوس؟ (Spy)",
+    g4Desc: "لعبة ذكاء وغموض جماعية لكشف الجاسوس المخفي",
     langBtn: "EN"
   },
   en: {
@@ -156,6 +169,8 @@ const translations = {
     g2Desc: "Social deduction game for 4 to 12 players",
     g3Title: "Who Am I?",
     g3Desc: "Guess the word from your friends' clues before time runs out",
+    g4Title: "Who is the Spy?",
+    g4Desc: "A social deduction game to uncover the hidden spy",
     langBtn: "AR"
   }
 };
@@ -174,6 +189,8 @@ function applyLang() {
   document.getElementById('t-g2-desc').textContent = translations[lang].g2Desc;
   document.getElementById('t-g3-title').textContent = translations[lang].g3Title;
   document.getElementById('t-g3-desc').textContent = translations[lang].g3Desc;
+  document.getElementById('t-g4-title').textContent = translations[lang].g4Title;
+  document.getElementById('t-g4-desc').textContent = translations[lang].g4Desc;
   document.getElementById('lang-btn').textContent = translations[lang].langBtn;
 
   // تعديل اتجاه السهم بناءً على اللغة
