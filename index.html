@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
-<title id="page-title">منصة الألعاب</title>
+<title id="page-title">منصة الألعاب الجماعية</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -41,7 +41,7 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
   transition:background .3s,color .3s;
 }
 
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
 .top-title{font-size:22px;font-weight:800;letter-spacing:.03em;color:var(--text);}
 .actions-wrap{display:flex;align-items:center;gap:8px;}
 
@@ -57,23 +57,34 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
   border-radius:50%;background:var(--text3);transition:transform .25s,background .25s;}
 .light .toggle-thumb{transform:translateX(14px);background:#fff;}
 
-.menu-subtitle{font-size:14px;color:var(--text2);margin-bottom:24px;font-weight:500;}
+.section-title {font-size: 12px; font-weight: 800; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; margin: 16px 0 8px 4px;}
 
-.games-list{display:flex;flex-direction:column;gap:12px;flex:1;}
+.games-list{display:flex;flex-direction:column;gap:12px;}
+
 .game-card{display:flex;align-items:center;justify-content:space-between;
   background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
-  padding:18px;text-decoration:none;color:inherit;transition:all .25s;box-shadow:var(--shadow);}
+  padding:16px;text-decoration:none;color:var(--text);box-shadow:var(--shadow);
+  transition:all .2s ease-in-out;}
 .game-card:active{transform:scale(.98);background:var(--bg3);}
 
-.game-info{display:flex;align-items:center;gap:16px;}
-.game-icon{font-size:32px;background:var(--bg3);padding:12px;border-radius:12px;
-  border:1px solid var(--border);display:flex;align-items:center;justify-content:center;}
-.game-name{font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px;}
-.game-desc{font-size:12px;color:var(--text2);line-height:1.4;}
+.game-info{display:flex;align-items:center;gap:14px;}
+.game-icon{font-size:26px;background:var(--bg3);border:1px solid var(--border);
+  width:48px;height:48px;display:flex;align-items:center;justify-content:center;
+  border-radius:12px;flex-shrink:0;}
 
-.arrow-icon{font-size:18px;color:var(--text3);font-weight:700;transition:transform .2s;}
+.game-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.game-desc{font-size:12px;color:var(--text2);font-weight:500;line-height:1.4;}
+
+.arrow-icon{font-size:14px;color:var(--text3);font-weight:700;transition:transform .2s;}
 .game-card:active .arrow-icon{transform:translateX(-4px);}
-.light .game-card:active .arrow-icon{transform:translateX(4px);}
+.light .game-card:active .arrow-icon{transform:translateX(-4px);}
+
+/* تصميم قسم قادماً قريباً */
+.coming-soon-card {display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg);border:1px dashed var(--border);border-radius:var(--radius);
+  padding:16px;opacity: 0.7;user-select: none;}
+.cs-tag {font-size: 10px; font-weight: 800; background: var(--bg3); border: 1px solid var(--border); 
+  color: var(--text2); padding: 4px 8px; border-radius: 50px; text-transform: uppercase;}
 </style>
 </head>
 <body>
@@ -89,17 +100,16 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
       </div>
     </div>
   </div>
-  
-  <p class="menu-subtitle" id="t-subtitle">اختر اللعبة التي تريد لعبها الآن:</p>
 
+  <h3 class="section-title" id="t-sec-games">الألعاب المتاحة</h3>
+  
   <div class="games-list">
-    
     <a href="xo.html" class="game-card">
       <div class="game-info">
         <span class="game-icon">❌</span>
         <div>
-          <h2 class="game-name" id="t-g1-title">إكس أو (Tic Tac Toe)</h2>
-          <p class="game-desc" id="t-g1-desc">العب ضد الكمبيوتر أو ضد صديقك على نفس الجهاز</p>
+          <h2 class="game-name" id="t-g1-title">إكس أو (XO)</h2>
+          <p class="game-desc" id="t-g1-desc">التحدي الكلاسيكي الشهير لشخصين</p>
         </div>
       </div>
       <span class="arrow-icon">←</span>
@@ -107,21 +117,21 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
 
     <a href="mafia.html" class="game-card">
       <div class="game-info">
-        <span class="game-icon">👤</span>
+        <span class="game-icon">🕵️</span>
         <div>
-          <h2 class="game-name" id="t-g2-title">لعبة المافيا (Mafia)</h2>
-          <p class="game-desc" id="t-g2-desc">لعبة جماعية وذكية تدعم من 4 إلى 12 لاعباً</p>
+          <h2 class="game-name" id="t-g2-title">لعبة المافيا</h2>
+          <p class="game-desc" id="t-g2-desc">اكشف القتلة والمافيا في القرية قبل أن يقضوا عليكم</p>
         </div>
       </div>
       <span class="arrow-icon">←</span>
     </a>
 
-    <a href="guess.html" class="game-card">
+    <a href="whoami.html" class="game-card">
       <div class="game-info">
-        <span class="game-icon">🎮</span>
+        <span class="game-icon">👤</span>
         <div>
-          <h2 class="game-name" id="t-g3-title">من أنا؟ (Who Am I)</h2>
-          <p class="game-desc" id="t-g3-desc">احزر الكلمة من شرح أصدقائك قبل انتهاء الوقت</p>
+          <h2 class="game-name" id="t-g3-title">من أنا؟</h2>
+          <p class="game-desc" id="t-g3-desc">خمن الشخصية السرية من خلال الأسئلة والأدلة</p>
         </div>
       </div>
       <span class="arrow-icon">←</span>
@@ -129,15 +139,73 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
 
     <a href="spy.html" class="game-card">
       <div class="game-info">
-        <span class="game-icon">🕵️‍♂️</span>
+        <span class="game-icon">🕶️</span>
         <div>
-          <h2 class="game-name" id="t-g4-title">من هو الجاسوس؟ (Spy)</h2>
-          <p class="game-desc" id="t-g4-desc">لعبة ذكاء وغموض جماعية لكشف الجاسوس المخفي</p>
+          <h2 class="game-name" id="t-g4-title">الجاسوس</h2>
+          <p class="game-desc" id="t-g4-desc">اكتشف العميل السري المندس بينكم</p>
         </div>
       </div>
       <span class="arrow-icon">←</span>
     </a>
 
+    <a href="five.html" class="game-card">
+      <div class="game-info">
+        <span class="game-icon">⏱️</span>
+        <div>
+          <h2 class="game-name" id="t-g5-title">تحدي الـ 5 ثواني</h2>
+          <p class="game-desc" id="t-g5-desc">جاوب بسرعة على الأسئلة واذكر 3 أشياء قبل انتهاء الوقت</p>
+        </div>
+      </div>
+      <span class="arrow-icon">←</span>
+    </a>
+
+    <a href="would.html" class="game-card">
+      <div class="game-info">
+        <span class="game-icon">🎭</span>
+        <div>
+          <h2 class="game-name" id="t-g6-title">لو خيروك؟</h2>
+          <p class="game-desc" id="t-g6-desc">اختر بين قرارين كلاهما صعب أو غريب وناقش أصدقائك</p>
+        </div>
+      </div>
+      <span class="arrow-icon">←</span>
+    </a>
+
+    <a href="bid.html" class="game-card">
+      <div class="game-info">
+        <span class="game-icon">🔨</span>
+        <div>
+          <h2 class="game-name" id="t-g7-title">مزاد الكلمات</h2>
+          <p class="game-desc" id="t-g7-desc">تزايد على عدد الكلمات التي يمكنك ذكرها قبل انتهاء الوقت</p>
+        </div>
+      </div>
+      <span class="arrow-icon">←</span>
+    </a>
+  </div>
+
+  <h3 class="section-title" id="t-sec-soon">قريباً</h3>
+  
+  <div class="games-list" style="margin-bottom: 24px;">
+    <div class="coming-soon-card">
+      <div class="game-info">
+        <span class="game-icon" style="filter: grayscale(100%);">🎲</span>
+        <div>
+          <h2 class="game-name" id="t-cs1-title" style="color:var(--text2);">إنسان، حيوان، نبات</h2>
+          <p class="game-desc" id="t-cs1-desc">اللعبة الكلاسيكية الحماسية لسرعة التفكير</p>
+        </div>
+      </div>
+      <span class="cs-tag" id="t-cs-tag1">قريباً</span>
+    </div>
+
+    <div class="coming-soon-card">
+      <div class="game-info">
+        <span class="game-icon" style="filter: grayscale(100%);">🔥</span>
+        <div>
+          <h2 class="game-name" id="t-cs2-title" style="color:var(--text2);">حقيقة أم جرأة</h2>
+          <p class="game-desc" id="t-cs2-desc">التحدي والضحك لكسر الحواجز بين الأصدقاء</p>
+        </div>
+      </div>
+      <span class="cs-tag" id="t-cs-tag2">قريباً</span>
+    </div>
   </div>
 
 </div>
@@ -149,28 +217,52 @@ let isLight = false;
 const translations = {
   ar: {
     mainTitle: "منصة الألعاب",
-    subtitle: "اختر اللعبة التي تريد لعبها الآن:",
-    g1Title: "إكس أو (Tic Tac Toe)",
-    g1Desc: "العب ضد الكمبيوتر أو ضد صديقك على نفس الجهاز",
-    g2Title: "لعبة المافيا (Mafia)",
-    g2Desc: "لعبة جماعية وذكية تدعم من 4 إلى 12 لاعباً",
-    g3Title: "من أنا؟ (Who Am I)",
-    g3Desc: "احزر الكلمة من شرح أصدقائك قبل انتهاء الوقت",
-    g4Title: "من هو الجاسوس؟ (Spy)",
-    g4Desc: "لعبة ذكاء وغموض جماعية لكشف الجاسوس المخفي",
+    secGames: "الألعاب المتاحة",
+    secSoon: "قريباً",
+    g1Title: "إكس أو (XO)",
+    g1Desc: "التحدي الكلاسيكي الشهير لشخصين",
+    g2Title: "لعبة المافيا",
+    g2Desc: "اكشف القتلة والمافيا في القرية قبل أن يقضوا عليكم",
+    g3Title: "من أنا؟",
+    g3Desc: "خمن الشخصية السرية من خلال الأسئلة والأدلة",
+    g4Title: "الجاسوس",
+    g4Desc: "اكتشف العميل السري المندس بينكم",
+    g5Title: "تحدي الـ 5 ثواني",
+    g5Desc: "جاوب بسرعة على الأسئلة واذكر 3 أشياء قبل انتهاء الوقت",
+    g6Title: "لو خيروك؟",
+    g6Desc: "اختر بين قرارين كلاهما صعب أو غريب وناقش أصدقائك",
+    g7Title: "مزاد الكلمات",
+    g7Desc: "تزايد على عدد الكلمات التي يمكنك ذكرها قبل انتهاء الوقت",
+    cs1Title: "إنسان، حيوان، نبات",
+    cs1Desc: "اللعبة الكلاسيكية الحماسية لسرعة التفكير",
+    cs2Title: "حقيقة أم جرأة",
+    cs2Desc: "التحدي والضحك لكسر الحواجز بين الأصدقاء",
+    csTag: "قريباً",
     langBtn: "EN"
   },
   en: {
-    mainTitle: "Games Platform",
-    subtitle: "Choose the game you want to play:",
-    g1Title: "X O (Tic Tac Toe)",
-    g1Desc: "Play against the computer or a friend",
+    mainTitle: "Games Hub",
+    secGames: "Available Games",
+    secSoon: "Coming Soon",
+    g1Title: "Tic-Tac-Toe",
+    g1Desc: "The classic match challenge for two players",
     g2Title: "Mafia Game",
-    g2Desc: "Social deduction game for 4 to 12 players",
+    g2Desc: "Expose the killers and mafia in the village",
     g3Title: "Who Am I?",
-    g3Desc: "Guess the word from your friends' clues before time runs out",
-    g4Title: "Who is the Spy?",
-    g4Desc: "A social deduction game to uncover the hidden spy",
+    g3Desc: "Guess the secret character using clues",
+    g4Title: "Spy",
+    g4Desc: "Find the undercover agent hidden among you",
+    g5Title: "5 Second Rule",
+    g5Desc: "Answer quickly and name 3 things before time runs out",
+    g6Title: "Would You Rather?",
+    g6Desc: "Choose between two difficult or weird options",
+    g7Title: "The Bid",
+    g7Desc: "Bid on how many words you can say before time runs out",
+    cs1Title: "Categories (Complete)",
+    cs1Desc: "Classic speed and vocabulary challenge",
+    cs2Title: "Truth or Dare",
+    cs2Desc: "Classic ice-breaker filled with fun and laughter",
+    csTag: "Soon",
     langBtn: "AR"
   }
 };
@@ -180,9 +272,12 @@ function applyLang() {
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
   localStorage.setItem('lang', lang);
 
-  document.title = translations[lang].mainTitle;
+  document.getElementById('page-title').textContent = translations[lang].mainTitle;
   document.getElementById('t-main-title').textContent = translations[lang].mainTitle;
-  document.getElementById('t-subtitle').textContent = translations[lang].subtitle;
+  document.getElementById('t-sec-games').textContent = translations[lang].secGames;
+  document.getElementById('t-sec-soon').textContent = translations[lang].secSoon;
+
+  // ترجمة الألعاب
   document.getElementById('t-g1-title').textContent = translations[lang].g1Title;
   document.getElementById('t-g1-desc').textContent = translations[lang].g1Desc;
   document.getElementById('t-g2-title').textContent = translations[lang].g2Title;
@@ -191,13 +286,23 @@ function applyLang() {
   document.getElementById('t-g3-desc').textContent = translations[lang].g3Desc;
   document.getElementById('t-g4-title').textContent = translations[lang].g4Title;
   document.getElementById('t-g4-desc').textContent = translations[lang].g4Desc;
-  document.getElementById('lang-btn').textContent = translations[lang].langBtn;
+  document.getElementById('t-g5-title').textContent = translations[lang].g5Title;
+  document.getElementById('t-g5-desc').textContent = translations[lang].g5Desc;
+  document.getElementById('t-g6-title').textContent = translations[lang].g6Title;
+  document.getElementById('t-g6-desc').textContent = translations[lang].g6Desc;
+  document.getElementById('t-g7-title').textContent = translations[lang].g7Title;
+  document.getElementById('t-g7-desc').textContent = translations[lang].g7Desc;
 
-  // تعديل اتجاه السهم بناءً على اللغة
-  const arrows = document.querySelectorAll('.arrow-icon');
-  arrows.forEach(arrow => {
-    arrow.textContent = lang === 'ar' ? '←' : '→';
-  });
+  // ترجمة القادم قريباً
+  document.getElementById('t-cs1-title').textContent = translations[lang].cs1Title;
+  document.getElementById('t-cs1-desc').textContent = translations[lang].cs1Desc;
+  document.getElementById('t-cs2-title').textContent = translations[lang].cs2Title;
+  document.getElementById('t-cs2-desc').textContent = translations[lang].cs2Desc;
+  
+  document.getElementById('t-cs-tag1').textContent = translations[lang].csTag;
+  document.getElementById('t-cs-tag2').textContent = translations[lang].csTag;
+
+  document.getElementById('lang-btn').textContent = translations[lang].langBtn;
 }
 
 function toggleLang() {
@@ -211,7 +316,6 @@ function toggleTheme() {
   document.getElementById('te0').textContent = isLight ? '☀️' : '🌙';
 }
 
-// تطبيق اللغة عند بدء تشغيل الصفحة
 applyLang();
 </script>
 </body>
