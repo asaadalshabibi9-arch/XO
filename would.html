@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+<title id="page-title">لعبة لو خيروك</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#0c0c0c;
+  --bg2:#161616;
+  --bg3:#1f1f1f;
+  --border:#2a2a2a;
+  --text:#f2ede8;
+  --text2:#b0a89e;
+  --text3:#5a5450;
+  --x:#e07a5f;
+  --o:#5b8ccc;
+  --shadow:0 4px 24px rgba(0,0,0,.5);
+  --radius:16px;
+}
+.light{
+  --bg:#f0ece6;
+  --bg2:#fff;
+  --bg3:#e8e2da;
+  --border:#d4ccc4;
+  --text:#1a1614;
+  --text2:#6a6058;
+  --text3:#aaa49e;
+  --x:#c4593c;
+  --o:#2e69b0;
+  --shadow:0 4px 24px rgba(0,0,0,.1);
+}
+
+html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
+
+.gw{
+  width:100%;max-width:420px;margin:0 auto;
+  padding:16px 16px max(16px, env(safe-area-inset-bottom));
+  padding-top:max(16px, env(safe-area-inset-top));
+  color:var(--text);background:var(--bg);
+  min-height:100vh;display:flex;flex-direction:column;
+  transition:background .3s,color .3s;
+}
+
+.screen{display:none;flex-direction:column;flex:1;}
+.screen.active{display:flex;}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.top-title{font-size:20px;font-weight:800;letter-spacing:.05em;color:var(--text);}
+.actions-wrap{display:flex;align-items:center;gap:8px;}
+
+.action-btn{display:flex;align-items:center;gap:6px;cursor:pointer;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:50px;padding:6px 12px;transition:background .25s,border-color .25s;
+  user-select:none;font-size:12px;font-weight:700;color:var(--text2);}
+
+.toggle-track{width:32px;height:18px;border-radius:10px;background:var(--border);
+  position:relative;transition:background .25s;flex-shrink:0;}
+.light .toggle-track{background:#bbb;}
+.toggle-thumb{position:absolute;top:2px;left:2px;width:14px;height:14px;
+  border-radius:50%;background:var(--text3);transition:transform .25s,background .25s;}
+.light .toggle-thumb{transform:translateX(14px);background:#fff;}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;margin-bottom:12px;transition:background .3s,border-color .3s;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;justify-content:center;min-height:160px;cursor:pointer;
+  position:relative;overflow:hidden;}
+.card:active{transform:scale(.98);}
+
+.card-option {font-size:18px;font-weight:700;line-height:1.4;color:var(--text);text-align:center;}
+.opt-a {border-left: 5px solid var(--x);}
+.light .opt-a {border-left: 5px solid var(--x);}
+.opt-b {border-left: 5px solid var(--o);}
+.light .opt-b {border-left: 5px solid var(--o);}
+
+.vs-divider {text-align:center;font-size:14px;font-weight:800;color:var(--text3);
+  margin:12px 0;text-transform:uppercase;letter-spacing:1px;}
+
+.go-btn{width:100%;padding:17px;background:var(--x);border:none;border-radius:12px;
+  color:#fff;font-size:17px;font-weight:800;cursor:pointer;
+  font-family:'Tajawal',sans-serif;margin-top:auto;letter-spacing:.03em;
+  transition:opacity .15s,transform .15s;box-shadow:0 4px 20px rgba(224,122,95,.3);text-align:center;}
+.go-btn:active{opacity:.85;transform:scale(.98);}
+
+.back-link{display:block;text-align:center;color:var(--text2);text-decoration:none;
+  font-size:14px;font-weight:700;margin-top:18px;transition:color .2s;}
+.back-link:active{color:var(--x);}
+
+.stat-box {display:none;font-size:24px;font-weight:800;color:var(--text);margin-top:12px;text-align:center;}
+.card.selected .stat-box {display:block;}
+</style>
+</head>
+<body>
+<div class="gw" id="app">
+
+  <div class="screen active" id="play-screen">
+    <div class="topbar">
+      <span class="top-title" id="t-main-title">لو خيروك؟</span>
+      <div class="actions-wrap">
+        <div class="action-btn" onclick="toggleLang()" id="lang-btn">EN</div>
+        <div class="action-btn" onclick="toggleTheme()">
+          <span id="te0">🌙</span>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:13px;color:var(--text2);margin-bottom:18px;text-align:center;font-weight:600;" id="t-subtitle">
+      اختر أحد الخيارين لمشاهدة النسبة، ثم اضغط التالي!
+    </p>
+
+    <div class="card opt-a" id="option-a-card" onclick="makeChoice('A')">
+      <p class="card-option" id="opt-a-text">...</p>
+      <div class="stat-box" id="stat-a">0%</div>
+    </div>
+
+    <div class="vs-divider" id="t-vs">- أو -</div>
+
+    <div class="card opt-b" id="option-b-card" onclick="makeChoice('B')">
+      <p class="card-option" id="opt-b-text">...</p>
+      <div class="stat-box" id="stat-b">0%</div>
+    </div>
+
+    <button class="go-btn" style="margin-top:18px;" id="t-next-btn" onclick="nextQuestion()">السؤال التالي ←</button>
+    <a href="index.html" class="back-link" id="t-back-home">رجوع للقائمة الرئيسية</a>
+  </div>
+
+</div>
+
+<script>
+let lang = localStorage.getItem('lang') || 'ar';
+let isLight = false;
+let hasVoted = false;
+let questions = [];
+let currentQ = null;
+
+// بنك الأسئلة الضخم والمتنوع
+const questionsBank = {
+  ar: [
+    ["تعيش بدون إنترنت لمدة سنة كاملة", "تعيش بدون مكيف في الصيف لمدة سنة"],
+    ["تكون قادراً على قراءة أفكار الآخرين", "تكون قادراً على رؤية المستقبل"],
+    ["تأكل وجبة واحدة فقط طول حياتك", "تنام 3 ساعات فقط كل يوم مدى الحياة"],
+    ["تسافر إلى الفضاء الخارجي", "تستكشف أعمق نقطة في المحيط"],
+    ["تفوز بمليون دولار فوراً", "تستعيد 5 سنوات من شبابك وصحتك"],
+    ["تكون غنياً جداً ولكن وحيداً تماماً", "تكون متوسط الدخل ولديك أصدقاء رائعون"],
+    ["تفقد القدرة على التحدث", "تفقد القدرة على السمع"],
+    ["تعيش في كوخ هادئ في الغابة", "تعيش في شقة فاخرة وسط مدينة مزدحمة"],
+    ["تعرف يوم وفاتك بالتحديد", "تعرف كيف ستموت بالتحديد"],
+    ["تتحدث جميع لغات العالم بطلاقة", "تعزف على جميع الآلات الموسيقية ببراعة"],
+    ["تمتلك قوة الطيران", "تمتلك قوة الاختفاء"],
+    ["تمتنع عن السكريات والحلويات للأبد", "تمتنع عن الوجبات السريعة للأبد"],
+    ["تكون مشهوراً ومكروهاً من الناس", "تكون شخصاً عادياً ومحبوباً من الجميع"],
+    ["تعيش في الماضي (قبل 100 سنة)", "تعيش في المستقبل (بعد 100 سنة)"],
+    ["تستحم بماء مثلج يومياً", "تشرب قهوة باردة طوال حياتك"],
+    ["تمتلك ذاكرة بصرية خارقة لا تنسى شيئاً", "تستطيع مسح أي ذكرى سيئة من عقلك"],
+    ["تكون دائماً متأخراً 15 دقيقة عن مواعيدك", "تكون دائماً مبكراً 30 دقيقة وتنتظر"],
+    ["تتوقف عن استخدام هاتفك لمدة شهر", "تتوقف عن تناول طعامك المفضل لشهرين"],
+    ["تعيش حياة طويلة وهادئة ومملة", "تعيش حياة قصيرة مليئة بالمغامرات والإثارة"],
+    ["تتحدث مع الحيوانات وتفهمها", "تتحدث بـ 50 لغة بشرية مختلفة"]
+  ],
+  en: [
+    ["Live without internet for a whole year", "Live without AC during summer for a year"],
+    ["Be able to read people's minds", "Be able to see the future"],
+    ["Eat only one meal for the rest of your life", "Sleep only 3 hours every day for life"],
+    ["Travel to outer space", "Explore the deepest point of the ocean"],
+    ["Win $1 Million instantly", "Regain 5 years of youth and health"],
+    ["Be extremely rich but totally alone", "Have an average income but great friends"],
+    ["Lose the ability to speak", "Lose the ability to hear"],
+    ["Live in a quiet cabin in the woods", "Live in a luxury apartment in a crowded city"],
+    ["Know the exact day of your death", "Know the exact cause of your death"],
+    ["Speak all the languages in the world fluently", "Play all musical instruments perfectly"],
+    ["Have the ability to fly", "Have the ability to turn invisible"],
+    ["No sweets and sugar for life", "No fast food for life"],
+    ["Be famous and hated by everyone", "Be ordinary and loved by everyone"],
+    ["Live 100 years in the past", "Live 100 years in the future"],
+    ["Take ice-cold showers every day", "Drink cold coffee for the rest of your life"],
+    ["Have photographic memory", "Be able to erase any bad memory from your mind"],
+    ["Always be 15 minutes late", "Always be 30 minutes early"],
+    ["Stop using your phone for a month", "Stop eating your favorite food for 2 months"],
+    ["Live a long, quiet, and boring life", "Live a short life full of adventure and excitement"],
+    ["Talk to animals and understand them", "Speak 50 human languages fluently"]
+  ]
+};
+
+const translations = {
+  ar: {
+    title: "لو خيروك؟",
+    subtitle: "اختر أحد الخيارين لمشاهدة النسبة، ثم اضغط التالي!",
+    vs: "- أو -",
+    next: "السؤال التالي ←",
+    back: "رجوع للقائمة الرئيسية",
+    lang: "EN"
+  },
+  en: {
+    title: "Would You Rather?",
+    subtitle: "Choose an option to see the percentage, then tap Next!",
+    vs: "- OR -",
+    next: "Next Question ←",
+    back: "Back to Main Menu",
+    lang: "AR"
+  }
+};
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  localStorage.setItem('lang', lang);
+
+  document.getElementById('page-title').textContent = translations[lang].title;
+  document.getElementById('t-main-title').textContent = translations[lang].title;
+  document.getElementById('t-subtitle').textContent = translations[lang].subtitle;
+  document.getElementById('t-vs').textContent = translations[lang].vs;
+  document.getElementById('t-next-btn').textContent = translations[lang].next;
+  document.getElementById('t-back-home').textContent = translations[lang].back;
+  document.getElementById('lang-btn').textContent = translations[lang].lang;
+
+  // خلط الأسئلة عند تبديل اللغة
+  questions = [...questionsBank[lang]].sort(() => Math.random() - 0.5);
+  nextQuestion();
+}
+
+function toggleLang() {
+  lang = lang === 'ar' ? 'en' : 'ar';
+  applyLang();
+}
+
+function toggleTheme() {
+  isLight = !isLight;
+  document.getElementById('app').classList.toggle('light', isLight);
+  document.getElementById('te0').textContent = isLight ? '☀️' : '🌙';
+}
+
+function makeChoice(opt) {
+  if (hasVoted) return;
+  hasVoted = true;
+
+  // توليد نسب عشوائية واقعية وممتعة للتصويت
+  const percentageA = Math.floor(Math.random() * 41) + 30; // من 30% إلى 70%
+  const percentageB = 100 - percentageA;
+
+  document.getElementById('stat-a').textContent = percentageA + '%';
+  document.getElementById('stat-b').textContent = percentageB + '%';
+
+  document.getElementById('option-a-card').classList.add('selected');
+  document.getElementById('option-b-card').classList.add('selected');
+
+  if (opt === 'A') {
+    document.getElementById('option-a-card').style.background = "rgba(224,122,95,0.15)";
+  } else {
+    document.getElementById('option-b-card').style.background = "rgba(91,140,204,0.15)";
+  }
+}
+
+function nextQuestion() {
+  hasVoted = false;
+  document.getElementById('option-a-card').classList.remove('selected');
+  document.getElementById('option-b-card').classList.remove('selected');
+  document.getElementById('option-a-card').style.background = "";
+  document.getElementById('option-b-card').style.background = "";
+
+  if (questions.length === 0) {
+    questions = [...questionsBank[lang]].sort(() => Math.random() - 0.5);
+  }
+
+  currentQ = questions.pop();
+  document.getElementById('opt-a-text').textContent = currentQ[0];
+  document.getElementById('opt-b-text').textContent = currentQ[1];
+}
+
+applyLang();
+</script>
+</body>
+</html>
