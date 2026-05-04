@@ -29,8 +29,6 @@
   --text:#1a1614;
   --text2:#6a6058;
   --text3:#aaa49e;
-  --x:#c4593c;
-  --o:#2e69b0;
   --green:#4a9c6d;
   --shadow:0 4px 24px rgba(0,0,0,.1);
 }
@@ -83,6 +81,12 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
 .cat-btn.selected {background:rgba(224,122,95,.15);border-color:var(--x);color:var(--x);}
 .cat-emoji {font-size:28px;}
 
+/* شبكة تحديد الوقت */
+.time-grid {display:grid;grid-template-columns:repeat(3, 1fr);gap:8px;margin-bottom:4px;}
+.time-btn {background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;
+  font-size:14px;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;}
+.time-btn.selected {background:var(--x);color:#fff;border-color:var(--x);box-shadow:0 4px 12px rgba(224,122,95,.2);}
+
 .word-card {flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;
   background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
   padding:24px;text-align:center;margin-bottom:12px;box-shadow:var(--shadow);}
@@ -116,7 +120,7 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
       </div>
     </div>
 
-    <div class="card" style="flex:1;justify-content:center;">
+    <div class="card">
       <label class="lbl" id="t-select-cat">اختر تصنيف الكلمات:</label>
       <div class="category-grid" id="category-grid-ui">
         <div class="cat-btn selected" onclick="selectCategory('animals', this)">
@@ -136,9 +140,15 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
           <span id="t-cat-things">أدوات وأشياء</span>
         </div>
       </div>
-      <p style="font-size:12px;color:var(--text2);text-align:center;margin-top:12px;line-height:1.5;" id="t-rules">
-        طريقة اللعب: احمل الهاتف أمامك واجعل أصدقاءك يشرحون الكلمة لك دون قولها!
-      </p>
+    </div>
+
+    <div class="card">
+      <label class="lbl" id="t-select-time">تحديد وقت الجولة:</label>
+      <div class="time-grid" id="time-grid-ui">
+        <div class="time-btn" onclick="selectTime(30, this)">30s</div>
+        <div class="time-btn selected" onclick="selectTime(60, this)">60s</div>
+        <div class="time-btn" onclick="selectTime(90, this)">90s</div>
+      </div>
     </div>
 
     <button class="go-btn" id="t-start-game-btn" onclick="startGame()">ابدأ اللعب الآن ←</button>
@@ -183,6 +193,7 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
 let lang = localStorage.getItem('lang') || 'ar';
 let isLight = false;
 let selectedCategory = 'animals';
+let selectedTimeLimit = 60; // القيمة الافتراضية للوقت
 let currentWordIndex = 0;
 let score = 0;
 let timer = 60;
@@ -208,11 +219,11 @@ const translations = {
   ar: {
     mainTitle: "لعبة من أنا؟",
     selectCat: "اختر تصنيف الكلمات:",
+    selectTime: "تحديد وقت الجولة:",
     catAnimals: "حيوانات",
     catJobs: "مهن وظائف",
     catPlaces: "دول ومدن",
     catThings: "أدوات وأشياء",
-    rules: "طريقة اللعب: احمل الهاتف أمامك واجعل أصدقاءك يشرحون الكلمة لك دون قولها!",
     startGame: "ابدأ اللعب الآن ←",
     backHome: "رجوع للقائمة الرئيسية",
     playTitle: "خمن الكلمة",
@@ -229,11 +240,11 @@ const translations = {
   en: {
     mainTitle: "Who Am I?",
     selectCat: "Choose word category:",
+    selectTime: "Round duration:",
     catAnimals: "Animals",
     catJobs: "Jobs",
     catPlaces: "Places",
     catThings: "Things",
-    rules: "How to play: Hold the phone up and let your friends describe the word without saying it!",
     startGame: "Start Game Now ←",
     backHome: "Back to Main Menu",
     playTitle: "Guess Word",
@@ -257,11 +268,11 @@ function applyLang() {
   document.getElementById('page-title').textContent = translations[lang].mainTitle;
   document.getElementById('t-main-title').textContent = translations[lang].mainTitle;
   document.getElementById('t-select-cat').textContent = translations[lang].selectCat;
+  document.getElementById('t-select-time').textContent = translations[lang].selectTime;
   document.getElementById('t-cat-animals').textContent = translations[lang].catAnimals;
   document.getElementById('t-cat-jobs').textContent = translations[lang].catJobs;
   document.getElementById('t-cat-places').textContent = translations[lang].catPlaces;
   document.getElementById('t-cat-things').textContent = translations[lang].catThings;
-  document.getElementById('t-rules').textContent = translations[lang].rules;
   document.getElementById('t-start-game-btn').textContent = translations[lang].startGame;
   document.getElementById('t-back-home0').textContent = translations[lang].backHome;
   document.getElementById('t-back-home1').textContent = translations[lang].backHome;
@@ -298,12 +309,17 @@ function selectCategory(cat, el) {
   el.classList.add('selected');
 }
 
+function selectTime(seconds, el) {
+  selectedTimeLimit = seconds;
+  document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
 function startGame() {
   score = 0;
-  timer = 60;
+  timer = selectedTimeLimit; // تعيين الوقت حسب اختيار المستخدم
   document.getElementById('live-score').textContent = translations[lang].scoreText + score;
   
-  // تجميع الكلمات وخلطها عشوائياً
   activeWords = [...wordBank[lang][selectedCategory]].sort(() => Math.random() - 0.5);
   currentWordIndex = 0;
 
@@ -316,7 +332,6 @@ function displayWord() {
   if (currentWordIndex < activeWords.length) {
     document.getElementById('word-display').textContent = activeWords[currentWordIndex];
   } else {
-    // إعادة خلط الكلمات إذا انتهت قبل انتهاء الوقت
     activeWords = [...wordBank[lang][selectedCategory]].sort(() => Math.random() - 0.5);
     currentWordIndex = 0;
     document.getElementById('word-display').textContent = activeWords[currentWordIndex];
@@ -324,17 +339,21 @@ function displayWord() {
 }
 
 function startTimer() {
-  document.getElementById('timer-display').textContent = `00:60`;
+  updateTimerUI();
   clearInterval(timerInterval);
   timerInterval = setInterval(() => {
     timer--;
-    let seconds = timer < 10 ? '0' + timer : timer;
-    document.getElementById('timer-display').textContent = `00:${seconds}`;
+    updateTimerUI();
 
     if (timer <= 0) {
       endGame();
     }
   }, 1000);
+}
+
+function updateTimerUI() {
+  let seconds = timer < 10 ? '0' + timer : timer;
+  document.getElementById('timer-display').textContent = `00:${seconds}`;
 }
 
 function correctWord() {
