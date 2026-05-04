@@ -190,20 +190,35 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
     <button class="go-btn" id="t-next-player-btn" onclick="nextReveal()">فهمت، التالي ←</button>
   </div>
 
+  <div class="screen" id="pass-vote-screen">
+    <div class="topbar">
+      <span class="top-title" id="t-pass-vote-title">بدء التصويت 🗳️</span>
+    </div>
+    <div class="card" style="flex:1;justify-content:center;text-align:center;">
+      <span style="font-size:64px;margin-bottom:20px;display:block;">🤫</span>
+      <h2 class="pass-text" id="t-pass-vote-text">مرر الهاتف للشخص التالي ليصوت</h2>
+      <p class="pass-desc" id="t-pass-vote-desc">سيقوم كل شخص باختيار من يشك به بشكل سري.</p>
+      <div style="background:var(--bg3);border-radius:10px;padding:12px;border:1px solid var(--border);font-weight:700;color:var(--o);font-size:18px;display:inline-block;" id="vote-player-name">
+        ...
+      </div>
+    </div>
+    <button class="go-btn" id="t-start-vote-btn" onclick="showVoteScreen()">أنا مستعد للتصويت ←</button>
+  </div>
+
   <div class="screen" id="vote-screen">
     <div class="topbar">
-      <span class="top-title" id="t-vote-title">كشف الجاسوس 🔍</span>
+      <span class="top-title" id="t-vote-title">تصويت سري 🕵️‍♂️</span>
     </div>
     <div class="card">
       <p style="font-size:14px;font-weight:700;line-height:1.5;" id="t-vote-desc">
-        تحدثوا الآن، وقم بوصف كلمتك بدون ذكرها. بعد النقاش، صوّتوا ضد اللاعب الذي تشكون أنه الجاسوس:
+        يا <span id="voter-name" style="color:var(--x);">...</span>، من تعتقد أنه الجاسوس؟
       </p>
     </div>
     <div class="card" style="flex:1;">
       <label class="lbl" id="t-vote-list-lbl">اختر الشخص المستبعد:</label>
       <div id="vote-players-list"></div>
     </div>
-    <button class="go-btn" id="t-confirm-vote-btn" onclick="confirmVote()">تأكيد التصويت ونهاية الجولة ←</button>
+    <button class="go-btn" id="t-confirm-vote-btn" onclick="submitSingleVote()">تأكيد التصويت ←</button>
   </div>
 
   <div class="screen" id="end-screen">
@@ -233,10 +248,12 @@ let isLight = false;
 
 let selectedTotalPlayers = 3;
 let revealIndex = 0;
+let voteIndex = 0;
 let normalWord = '';
 let spyWord = '';
 let selectedSpyId = null;
-let selectedVoteTarget = null;
+let selectedVoteTargetId = null;
+let voteCounts = {}; // لتخزين عدد الأصوات لكل لاعب
 
 const wordPairs = [
   { ar: ["طائرة", "قطار"], en: ["Airplane", "Train"] },
@@ -270,10 +287,14 @@ const translations = {
     revealTitle: "كلمتك السرية",
     revealNote: "تذكر الكلمة جيداً، واضغط التالي ثم مرر الهاتف لصديقك.",
     nextPlayer: "فهمت، التالي ←",
-    voteTitle: "كشف الجاسوس 🔍",
-    voteDesc: "تحدثوا الآن، وقم بوصف كلمتك بدون ذكرها. بعد النقاش، صوّتوا ضد اللاعب الذي تشكون أنه الجاسوس:",
+    passVoteTitle: "بدء التصويت 🗳️",
+    passVoteText: "مرر الهاتف للشخص التالي ليصوت",
+    passVoteDesc: "سيقوم كل شخص باختيار من يشك به بشكل سري.",
+    startVoteBtn: "أنا مستعد للتصويت ←",
+    voteTitle: "تصويت سري 🕵️‍♂️",
+    voteDesc: "يا voterName، من تعتقد أنه الجاسوس؟",
     voteListLbl: "اختر الشخص المستبعد:",
-    confirmVote: "تأكيد التصويت ونهاية الجولة ←",
+    confirmVote: "تأكيد التصويت ←",
     endTitle: "النتيجة النهائية",
     victorySpy: "فاز الجاسوس! 🤫",
     victoryNormal: "فاز البقية! 🎉",
@@ -305,10 +326,14 @@ const translations = {
     revealTitle: "Your Secret Word",
     revealNote: "Memorize the word, then tap Next and pass the phone to your friend.",
     nextPlayer: "Got it, Next ←",
-    voteTitle: "Spot the Spy 🔍",
-    voteDesc: "Speak now and describe your word without saying it. After the discussion, vote for the person you suspect:",
+    passVoteTitle: "Start Voting 🗳️",
+    passVoteText: "Pass the phone for the next voter",
+    passVoteDesc: "Each person will secretly vote for the player they suspect.",
+    startVoteBtn: "I am ready to vote ←",
+    voteTitle: "Secret Vote 🕵️‍♂️",
+    voteDesc: "Hey voterName, who do you suspect?",
     voteListLbl: "Choose eliminated person:",
-    confirmVote: "Confirm Vote & End Day ←",
+    confirmVote: "Confirm Vote ←",
     endTitle: "Final Result",
     victorySpy: "The Spy Wins! 🤫",
     victoryNormal: "Citizens Win! 🎉",
@@ -348,8 +373,11 @@ function applyLang() {
   document.getElementById('t-reveal-title').textContent = translations[lang].revealTitle;
   document.getElementById('t-reveal-note').textContent = translations[lang].revealNote;
   document.getElementById('t-next-player-btn').textContent = translations[lang].nextPlayer;
+  document.getElementById('t-pass-vote-title').textContent = translations[lang].passVoteTitle;
+  document.getElementById('t-pass-vote-text').textContent = translations[lang].passVoteText;
+  document.getElementById('t-pass-vote-desc').textContent = translations[lang].passVoteDesc;
+  document.getElementById('t-start-vote-btn').textContent = translations[lang].startVoteBtn;
   document.getElementById('t-vote-title').textContent = translations[lang].voteTitle;
-  document.getElementById('t-vote-desc').textContent = translations[lang].voteDesc;
   document.getElementById('t-vote-list-lbl').textContent = translations[lang].voteListLbl;
   document.getElementById('t-confirm-vote-btn').textContent = translations[lang].confirmVote;
   document.getElementById('t-end-title').textContent = translations[lang].endTitle;
@@ -372,7 +400,7 @@ function toggleTheme() {
 }
 
 function show(id) {
-  ['player-count-screen','setup-screen','pass-screen','reveal-screen','vote-screen','end-screen'].forEach(s =>
+  ['player-count-screen','setup-screen','pass-screen','reveal-screen','pass-vote-screen','vote-screen','end-screen'].forEach(s =>
     document.getElementById(s).className = 'screen' + (s === id ? ' active' : ''));
 }
 
@@ -456,6 +484,9 @@ function startGame() {
   });
 
   revealIndex = 0;
+  voteCounts = {};
+  players.forEach(p => { voteCounts[p.id] = 0; }); // تصفير الأصوات لجميع اللاعبين
+
   showPassScreen();
 }
 
@@ -465,7 +496,9 @@ function showPassScreen() {
     const p = players[revealIndex];
     document.getElementById('target-player-name').textContent = p.name;
   } else {
-    showVoteScreen();
+    // الانتقال لمرحلة التصويت الفردي
+    voteIndex = 0;
+    showPassVoteScreen();
   }
 }
 
@@ -482,38 +515,85 @@ function nextReveal() {
   showPassScreen();
 }
 
+// شاشة تمرير الهاتف للتصويت الفردي
+function showPassVoteScreen() {
+  if (voteIndex < players.length) {
+    show('pass-vote-screen');
+    const voter = players[voteIndex];
+    document.getElementById('vote-player-name').textContent = voter.name;
+  } else {
+    // جميع اللاعبين قاموا بالتصويت، إظهار النتائج النهائية
+    showFinalResult();
+  }
+}
+
+// شاشة التصويت الفردي لكل لاعب
 function showVoteScreen() {
   show('vote-screen');
-  selectedVoteTarget = null;
+  selectedVoteTargetId = null;
+  const voter = players[voteIndex];
+
+  // تعديل النص بناءً على لغة النظام واسم المصوّت
+  let desc = translations[lang].voteDesc;
+  desc = desc.replace('voterName', `<span style="color:var(--x);">${voter.name}</span>`);
+  document.getElementById('t-vote-desc').innerHTML = desc;
+
   const list = document.getElementById('vote-players-list');
   list.innerHTML = '';
 
+  // اللاعب يرى قائمة بكل اللاعبين الآخرين (باستثناء نفسه)
   players.forEach(p => {
-    const item = document.createElement('div');
-    item.className = 'vote-item';
-    item.innerHTML = `<span>${p.name}</span>`;
-    item.onclick = () => {
-      document.querySelectorAll('#vote-players-list .vote-item').forEach(x => x.classList.remove('selected'));
-      item.classList.add('selected');
-      selectedVoteTarget = p;
-    };
-    list.appendChild(item);
+    if (p.id !== voter.id) {
+      const item = document.createElement('div');
+      item.className = 'vote-item';
+      item.innerHTML = `<span>${p.name}</span>`;
+      item.onclick = () => {
+        document.querySelectorAll('#vote-players-list .vote-item').forEach(x => x.classList.remove('selected'));
+        item.classList.add('selected');
+        selectedVoteTargetId = p.id;
+      };
+      list.appendChild(item);
+    }
   });
 }
 
-function confirmVote() {
-  if (!selectedVoteTarget) {
+function submitSingleVote() {
+  if (!selectedVoteTargetId) {
     alert(lang === 'ar' ? 'يرجى اختيار شخص مستبعد أولاً!' : 'Please select a player first!');
     return;
   }
 
+  // إضافة الصوت
+  voteCounts[selectedVoteTargetId]++;
+  voteIndex++;
+  showPassVoteScreen();
+}
+
+// حساب النتيجة النهائية بعد التصويت
+function showFinalResult() {
   show('end-screen');
+
+  // البحث عن اللاعب الحاصل على أعلى عدد من الأصوات
+  let mostVotedId = null;
+  let maxVotes = -1;
+
+  for (let id in voteCounts) {
+    if (voteCounts[id] > maxVotes) {
+      maxVotes = voteCounts[id];
+      mostVotedId = id;
+    }
+  }
+
+  // تحويل الـ id إلى صيغة رقمية للمقارنة
+  mostVotedId = Number(mostVotedId);
+
   const spyObj = players.find(p => p.id === selectedSpyId);
   document.getElementById('res-spy-name').textContent = spyObj.name;
   document.getElementById('res-spy-word').textContent = spyWord;
   document.getElementById('res-normal-word').textContent = normalWord;
 
-  if (selectedVoteTarget.id === selectedSpyId) {
+  // إذا تم استبعاد الجاسوس (أي أن اللاعب صاحب أعلى أصوات هو الجاسوس)
+  if (mostVotedId === selectedSpyId) {
     document.getElementById('end-emoji').textContent = '🎉';
     document.getElementById('end-victory-text').textContent = translations[lang].victoryNormal;
   } else {
