@@ -16,7 +16,6 @@
   --text2:#b0a89e;
   --text3:#5a5450;
   --x:#e07a5f;
-  --o:#5b8ccc;
   --shadow:0 4px 24px rgba(0,0,0,.5);
   --radius:16px;
 }
@@ -28,24 +27,22 @@
   --text:#1a1614;
   --text2:#6a6058;
   --text3:#aaa49e;
-  --x:#c4593c;
-  --o:#2e69b0;
   --shadow:0 4px 24px rgba(0,0,0,.1);
 }
 
 html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
 
 .gw{
-  width:100%;max-width:440px;margin:0 auto;
+  width:100%;max-width:420px;margin:0 auto;
   padding:16px 16px max(16px, env(safe-area-inset-bottom));
   padding-top:max(16px, env(safe-area-inset-top));
   color:var(--text);background:var(--bg);
   min-height:100vh;display:flex;flex-direction:column;
-  transition:background .25s,color .25s;
+  transition:background .3s,color .3s;
 }
 
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
-.top-title{font-size:22px;font-weight:800;letter-spacing:.05em;color:var(--text);}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.top-title{font-size:22px;font-weight:800;letter-spacing:.03em;color:var(--text);}
 .actions-wrap{display:flex;align-items:center;gap:8px;}
 
 .action-btn{display:flex;align-items:center;gap:6px;cursor:pointer;
@@ -60,30 +57,23 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
   border-radius:50%;background:var(--text3);transition:transform .25s,background .25s;}
 .light .toggle-thumb{transform:translateX(14px);background:#fff;}
 
-.menu-subtitle{font-size:14px;color:var(--text2);margin-bottom:20px;font-weight:500;}
+.menu-subtitle{font-size:14px;color:var(--text2);margin-bottom:24px;font-weight:500;}
 
 .games-list{display:flex;flex-direction:column;gap:12px;flex:1;}
-
 .game-card{display:flex;align-items:center;justify-content:space-between;
   background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
-  padding:18px;text-decoration:none;color:var(--text);transition:all .2s ease;
-  box-shadow:var(--shadow);cursor:pointer;}
-.game-card:not(.disabled):active{transform:scale(.98);background:var(--bg3);}
+  padding:18px;text-decoration:none;color:inherit;transition:all .25s;box-shadow:var(--shadow);}
+.game-card:active{transform:scale(.98);background:var(--bg3);}
 
-/* تصميم الكرت المعطل / القادم قريباً */
-.game-card.disabled{opacity:0.6;cursor:default;border-style:dashed;}
+.game-info{display:flex;align-items:center;gap:16px;}
+.game-icon{font-size:32px;background:var(--bg3);padding:12px;border-radius:12px;
+  border:1px solid var(--border);display:flex;align-items:center;justify-content:center;}
+.game-name{font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.game-desc{font-size:12px;color:var(--text2);line-height:1.4;}
 
-.game-info{display:flex;align-items:center;gap:14px;}
-.game-icon{font-size:32px;display:flex;align-items:center;justify-content:center;
-  background:var(--bg3);width:54px;height:54px;border-radius:12px;border:1px solid var(--border);}
-
-.game-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:2px;}
-.game-desc{font-size:12px;color:var(--text2);font-weight:500;}
-
-.arrow-icon{font-size:18px;color:var(--text3);font-weight:700;transition:color .2s;}
-.game-card:not(.disabled):hover .arrow-icon{color:var(--x);}
-
-.badge{background:var(--bg3);color:var(--text2);font-size:11px;padding:4px 8px;border-radius:6px;font-weight:700;border:1px solid var(--border);}
+.arrow-icon{font-size:18px;color:var(--text3);font-weight:700;transition:transform .2s;}
+.game-card:active .arrow-icon{transform:translateX(-4px);}
+.light .game-card:active .arrow-icon{transform:translateX(4px);}
 </style>
 </head>
 <body>
@@ -99,8 +89,8 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
       </div>
     </div>
   </div>
-
-  <p class="menu-subtitle" id="t-subtitle">اختر اللعبة التي تريد الاستمتاع بها:</p>
+  
+  <p class="menu-subtitle" id="t-subtitle">اختر اللعبة التي تريد لعبها الآن:</p>
 
   <div class="games-list">
     
@@ -109,33 +99,33 @@ html,body{height:100%;background:var(--bg);font-family:'Tajawal',sans-serif;}
         <span class="game-icon">❌</span>
         <div>
           <h2 class="game-name" id="t-g1-title">إكس أو (Tic Tac Toe)</h2>
-          <p class="game-desc" id="t-g1-desc">العب ضد صديقك أو ضد الذكاء الاصطناعي</p>
+          <p class="game-desc" id="t-g1-desc">العب ضد الكمبيوتر أو ضد صديقك على نفس الجهاز</p>
         </div>
       </div>
-      <span class="arrow-icon">→</span>
+      <span class="arrow-icon">←</span>
     </a>
 
     <a href="mafia.html" class="game-card">
       <div class="game-info">
         <span class="game-icon">🕵️‍♂️</span>
         <div>
-          <h2 class="game-name" id="t-g2-title">المافيا (Mafia)</h2>
-          <p class="game-desc" id="t-g2-desc">لعبة الذكاء والاستنتاج الجماعية</p>
+          <h2 class="game-name" id="t-g2-title">لعبة المافيا (Mafia)</h2>
+          <p class="game-desc" id="t-g2-desc">لعبة جماعية وذكية تدعم من 4 إلى 12 لاعباً</p>
         </div>
       </div>
-      <span class="arrow-icon">→</span>
+      <span class="arrow-icon">←</span>
     </a>
 
-    <div class="game-card disabled">
+    <a href="guess.html" class="game-card">
       <div class="game-info">
         <span class="game-icon">🎮</span>
         <div>
-          <h2 class="game-name" id="t-g3-title">لعبة جديدة</h2>
-          <p class="game-desc" id="t-g3-desc">قادمة قريباً في التحديث القادم</p>
+          <h2 class="game-name" id="t-g3-title">من أنا؟ (Who Am I)</h2>
+          <p class="game-desc" id="t-g3-desc">احزر الكلمة من شرح أصدقائك قبل انتهاء الوقت</p>
         </div>
       </div>
-      <span class="badge" id="t-g3-badge">قريباً</span>
-    </div>
+      <span class="arrow-icon">←</span>
+    </a>
 
   </div>
 
@@ -148,26 +138,24 @@ let isLight = false;
 const translations = {
   ar: {
     mainTitle: "منصة الألعاب",
-    subtitle: "اختر اللعبة التي تريد الاستمتاع بها:",
+    subtitle: "اختر اللعبة التي تريد لعبها الآن:",
     g1Title: "إكس أو (Tic Tac Toe)",
-    g1Desc: "العب ضد صديقك أو ضد الذكاء الاصطناعي",
-    g2Title: "المافيا (Mafia)",
-    g2Desc: "لعبة الذكاء والاستنتاج الجماعية",
-    g3Title: "لعبة جديدة",
-    g3Desc: "قادمة قريباً في التحديث القادم",
-    g3Badge: "قريباً",
+    g1Desc: "العب ضد الكمبيوتر أو ضد صديقك على نفس الجهاز",
+    g2Title: "لعبة المافيا (Mafia)",
+    g2Desc: "لعبة جماعية وذكية تدعم من 4 إلى 12 لاعباً",
+    g3Title: "من أنا؟ (Who Am I)",
+    g3Desc: "احزر الكلمة من شرح أصدقائك قبل انتهاء الوقت",
     langBtn: "EN"
   },
   en: {
     mainTitle: "Games Platform",
     subtitle: "Choose the game you want to play:",
     g1Title: "X O (Tic Tac Toe)",
-    g1Desc: "Play against a friend or the AI",
+    g1Desc: "Play against the computer or a friend",
     g2Title: "Mafia Game",
-    g2Desc: "Social deduction and intelligence game",
-    g3Title: "New Game",
-    g3Desc: "Coming soon in the next update",
-    g3Badge: "Soon",
+    g2Desc: "Social deduction game for 4 to 12 players",
+    g3Title: "Who Am I?",
+    g3Desc: "Guess the word from your friends' clues before time runs out",
     langBtn: "AR"
   }
 };
@@ -177,7 +165,7 @@ function applyLang() {
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
   localStorage.setItem('lang', lang);
 
-  document.getElementById('page-title').textContent = translations[lang].mainTitle;
+  document.title = translations[lang].mainTitle;
   document.getElementById('t-main-title').textContent = translations[lang].mainTitle;
   document.getElementById('t-subtitle').textContent = translations[lang].subtitle;
   document.getElementById('t-g1-title').textContent = translations[lang].g1Title;
@@ -186,8 +174,13 @@ function applyLang() {
   document.getElementById('t-g2-desc').textContent = translations[lang].g2Desc;
   document.getElementById('t-g3-title').textContent = translations[lang].g3Title;
   document.getElementById('t-g3-desc').textContent = translations[lang].g3Desc;
-  document.getElementById('t-g3-badge').textContent = translations[lang].g3Badge;
   document.getElementById('lang-btn').textContent = translations[lang].langBtn;
+
+  // تعديل اتجاه السهم بناءً على اللغة
+  const arrows = document.querySelectorAll('.arrow-icon');
+  arrows.forEach(arrow => {
+    arrow.textContent = lang === 'ar' ? '←' : '→';
+  });
 }
 
 function toggleLang() {
@@ -201,7 +194,7 @@ function toggleTheme() {
   document.getElementById('te0').textContent = isLight ? '☀️' : '🌙';
 }
 
-// تطبيق الإعدادات عند التحميل
+// تطبيق اللغة عند بدء تشغيل الصفحة
 applyLang();
 </script>
 </body>
